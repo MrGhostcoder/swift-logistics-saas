@@ -20,6 +20,9 @@ import { Route as CheckoutPlanIdRouteImport } from './routes/checkout.$planId'
 import { Route as TrackIndexRouteImport } from './routes/track.index'
 import { Route as TrackCodeRouteImport } from './routes/track.$code'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardTrackingIndexRouteImport } from './routes/_authenticated/dashboard.tracking.index'
+import { Route as AuthenticatedDashboardTrackingIdRouteImport } from './routes/_authenticated/dashboard.tracking.$id'
+import { Route as AuthenticatedDashboardTrackingNewRouteImport } from './routes/_authenticated/dashboard.tracking.new'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -76,6 +79,24 @@ const AuthenticatedDashboardIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardTrackingIndexRoute =
+  AuthenticatedDashboardTrackingIndexRouteImport.update({
+    id: '/tracking/',
+    path: '/tracking/',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardTrackingIdRoute =
+  AuthenticatedDashboardTrackingIdRouteImport.update({
+    id: '/tracking/$id',
+    path: '/tracking/$id',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardTrackingNewRoute =
+  AuthenticatedDashboardTrackingNewRouteImport.update({
+    id: '/tracking/new',
+    path: '/tracking/new',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -88,6 +109,9 @@ export interface FileRoutesByFullPath {
   '/track/$code': typeof TrackCodeRoute
   '/track/': typeof TrackIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
+  '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
+  '/dashboard/tracking/': typeof AuthenticatedDashboardTrackingIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -99,6 +123,9 @@ export interface FileRoutesByTo {
   '/track/$code': typeof TrackCodeRoute
   '/track': typeof TrackIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
+  '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
+  '/dashboard/tracking': typeof AuthenticatedDashboardTrackingIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -113,6 +140,9 @@ export interface FileRoutesById {
   '/track/$code': typeof TrackCodeRoute
   '/track/': typeof TrackIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
+  '/_authenticated/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
+  '/_authenticated/dashboard/tracking/': typeof AuthenticatedDashboardTrackingIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -127,6 +157,9 @@ export interface FileRouteTypes {
     | '/track/$code'
     | '/track/'
     | '/dashboard/'
+    | '/dashboard/tracking/$id'
+    | '/dashboard/tracking/new'
+    | '/dashboard/tracking/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -138,6 +171,9 @@ export interface FileRouteTypes {
     | '/track/$code'
     | '/track'
     | '/dashboard'
+    | '/dashboard/tracking/$id'
+    | '/dashboard/tracking/new'
+    | '/dashboard/tracking'
   id:
     | '__root__'
     | '/'
@@ -151,6 +187,9 @@ export interface FileRouteTypes {
     | '/track/$code'
     | '/track/'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/tracking/$id'
+    | '/_authenticated/dashboard/tracking/new'
+    | '/_authenticated/dashboard/tracking/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,16 +283,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/tracking/': {
+      id: '/_authenticated/dashboard/tracking/'
+      path: '/tracking'
+      fullPath: '/dashboard/tracking/'
+      preLoaderRoute: typeof AuthenticatedDashboardTrackingIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/tracking/$id': {
+      id: '/_authenticated/dashboard/tracking/$id'
+      path: '/tracking/$id'
+      fullPath: '/dashboard/tracking/$id'
+      preLoaderRoute: typeof AuthenticatedDashboardTrackingIdRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/tracking/new': {
+      id: '/_authenticated/dashboard/tracking/new'
+      path: '/tracking/new'
+      fullPath: '/dashboard/tracking/new'
+      preLoaderRoute: typeof AuthenticatedDashboardTrackingNewRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
   }
 }
 
 interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardTrackingIdRoute: typeof AuthenticatedDashboardTrackingIdRoute
+  AuthenticatedDashboardTrackingNewRoute: typeof AuthenticatedDashboardTrackingNewRoute
+  AuthenticatedDashboardTrackingIndexRoute: typeof AuthenticatedDashboardTrackingIndexRoute
 }
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardTrackingIdRoute:
+      AuthenticatedDashboardTrackingIdRoute,
+    AuthenticatedDashboardTrackingNewRoute:
+      AuthenticatedDashboardTrackingNewRoute,
+    AuthenticatedDashboardTrackingIndexRoute:
+      AuthenticatedDashboardTrackingIndexRoute,
   }
 
 const AuthenticatedDashboardRouteWithChildren =

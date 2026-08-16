@@ -70,7 +70,7 @@ function TrackingDetail() {
   async function updateStatus(status: ShipStatus) {
     const { error } = await supabase
       .from("tracking_codes")
-      .update({ status, current_location: location || data?.tc.current_location })
+      .update({ status, current_location: location || data?.tc.current_location || null })
       .eq("id", id);
     if (error) {
       toast.error("Could not update the status.");
