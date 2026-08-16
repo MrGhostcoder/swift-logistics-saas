@@ -20,6 +20,10 @@ import { Route as CheckoutPlanIdRouteImport } from './routes/checkout.$planId'
 import { Route as TrackIndexRouteImport } from './routes/track.index'
 import { Route as TrackCodeRouteImport } from './routes/track.$code'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard.index'
+import { Route as AuthenticatedDashboardMessagesRouteImport } from './routes/_authenticated/dashboard.messages'
+import { Route as AuthenticatedDashboardNotificationsRouteImport } from './routes/_authenticated/dashboard.notifications'
+import { Route as AuthenticatedDashboardPaymentsRouteImport } from './routes/_authenticated/dashboard.payments'
+import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardTrackingIndexRouteImport } from './routes/_authenticated/dashboard.tracking.index'
 import { Route as AuthenticatedDashboardTrackingIdRouteImport } from './routes/_authenticated/dashboard.tracking.$id'
 import { Route as AuthenticatedDashboardTrackingNewRouteImport } from './routes/_authenticated/dashboard.tracking.new'
@@ -79,6 +83,30 @@ const AuthenticatedDashboardIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardMessagesRoute =
+  AuthenticatedDashboardMessagesRouteImport.update({
+    id: '/messages',
+    path: '/messages',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardNotificationsRoute =
+  AuthenticatedDashboardNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardPaymentsRoute =
+  AuthenticatedDashboardPaymentsRouteImport.update({
+    id: '/payments',
+    path: '/payments',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
+const AuthenticatedDashboardSettingsRoute =
+  AuthenticatedDashboardSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardTrackingIndexRoute =
   AuthenticatedDashboardTrackingIndexRouteImport.update({
     id: '/tracking/',
@@ -108,6 +136,10 @@ export interface FileRoutesByFullPath {
   '/checkout/$planId': typeof CheckoutPlanIdRoute
   '/track/$code': typeof TrackCodeRoute
   '/track/': typeof TrackIndexRoute
+  '/dashboard/messages': typeof AuthenticatedDashboardMessagesRoute
+  '/dashboard/notifications': typeof AuthenticatedDashboardNotificationsRoute
+  '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
@@ -122,6 +154,10 @@ export interface FileRoutesByTo {
   '/checkout/$planId': typeof CheckoutPlanIdRoute
   '/track/$code': typeof TrackCodeRoute
   '/track': typeof TrackIndexRoute
+  '/dashboard/messages': typeof AuthenticatedDashboardMessagesRoute
+  '/dashboard/notifications': typeof AuthenticatedDashboardNotificationsRoute
+  '/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
@@ -139,6 +175,10 @@ export interface FileRoutesById {
   '/checkout/$planId': typeof CheckoutPlanIdRoute
   '/track/$code': typeof TrackCodeRoute
   '/track/': typeof TrackIndexRoute
+  '/_authenticated/dashboard/messages': typeof AuthenticatedDashboardMessagesRoute
+  '/_authenticated/dashboard/notifications': typeof AuthenticatedDashboardNotificationsRoute
+  '/_authenticated/dashboard/payments': typeof AuthenticatedDashboardPaymentsRoute
+  '/_authenticated/dashboard/settings': typeof AuthenticatedDashboardSettingsRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/_authenticated/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
@@ -156,6 +196,10 @@ export interface FileRouteTypes {
     | '/checkout/$planId'
     | '/track/$code'
     | '/track/'
+    | '/dashboard/messages'
+    | '/dashboard/notifications'
+    | '/dashboard/payments'
+    | '/dashboard/settings'
     | '/dashboard/'
     | '/dashboard/tracking/$id'
     | '/dashboard/tracking/new'
@@ -170,6 +214,10 @@ export interface FileRouteTypes {
     | '/checkout/$planId'
     | '/track/$code'
     | '/track'
+    | '/dashboard/messages'
+    | '/dashboard/notifications'
+    | '/dashboard/payments'
+    | '/dashboard/settings'
     | '/dashboard'
     | '/dashboard/tracking/$id'
     | '/dashboard/tracking/new'
@@ -186,6 +234,10 @@ export interface FileRouteTypes {
     | '/checkout/$planId'
     | '/track/$code'
     | '/track/'
+    | '/_authenticated/dashboard/messages'
+    | '/_authenticated/dashboard/notifications'
+    | '/_authenticated/dashboard/payments'
+    | '/_authenticated/dashboard/settings'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/tracking/$id'
     | '/_authenticated/dashboard/tracking/new'
@@ -283,6 +335,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/messages': {
+      id: '/_authenticated/dashboard/messages'
+      path: '/messages'
+      fullPath: '/dashboard/messages'
+      preLoaderRoute: typeof AuthenticatedDashboardMessagesRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/notifications': {
+      id: '/_authenticated/dashboard/notifications'
+      path: '/notifications'
+      fullPath: '/dashboard/notifications'
+      preLoaderRoute: typeof AuthenticatedDashboardNotificationsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/payments': {
+      id: '/_authenticated/dashboard/payments'
+      path: '/payments'
+      fullPath: '/dashboard/payments'
+      preLoaderRoute: typeof AuthenticatedDashboardPaymentsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
+    '/_authenticated/dashboard/settings': {
+      id: '/_authenticated/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof AuthenticatedDashboardSettingsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/tracking/': {
       id: '/_authenticated/dashboard/tracking/'
       path: '/tracking'
@@ -308,6 +388,10 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedDashboardRouteChildren {
+  AuthenticatedDashboardMessagesRoute: typeof AuthenticatedDashboardMessagesRoute
+  AuthenticatedDashboardNotificationsRoute: typeof AuthenticatedDashboardNotificationsRoute
+  AuthenticatedDashboardPaymentsRoute: typeof AuthenticatedDashboardPaymentsRoute
+  AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardTrackingIdRoute: typeof AuthenticatedDashboardTrackingIdRoute
   AuthenticatedDashboardTrackingNewRoute: typeof AuthenticatedDashboardTrackingNewRoute
@@ -316,6 +400,11 @@ interface AuthenticatedDashboardRouteChildren {
 
 const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
   {
+    AuthenticatedDashboardMessagesRoute: AuthenticatedDashboardMessagesRoute,
+    AuthenticatedDashboardNotificationsRoute:
+      AuthenticatedDashboardNotificationsRoute,
+    AuthenticatedDashboardPaymentsRoute: AuthenticatedDashboardPaymentsRoute,
+    AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardTrackingIdRoute:
       AuthenticatedDashboardTrackingIdRoute,
