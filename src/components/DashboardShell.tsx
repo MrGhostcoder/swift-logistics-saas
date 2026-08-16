@@ -5,7 +5,6 @@ import { Menu, X } from "lucide-react";
 import { Logo, TelegramButton } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useIsAdmin } from "@/hooks/useAuth";
 
 export type NavItem = { to: string; label: string };
 
@@ -19,7 +18,6 @@ export function DashboardShell({
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
-  const { data: isAdmin } = useIsAdmin();
 
   async function signOut() {
     await qc.cancelQueries();
@@ -40,13 +38,6 @@ export function DashboardShell({
                 Dashboard
               </Button>
             </Link>
-            {isAdmin && (
-              <Link to="/admin">
-                <Button variant="ghost" size="sm">
-                  Admin
-                </Button>
-              </Link>
-            )}
             <a href="/#features">
               <Button variant="ghost" size="sm">
                 Help
@@ -67,13 +58,6 @@ export function DashboardShell({
         {open && (
           <div className="space-y-2 border-t border-border px-4 py-4 md:hidden">
             <TelegramButton className="w-full" />
-            {isAdmin && (
-              <Link to="/admin" onClick={() => setOpen(false)} className="block">
-                <Button variant="outline" className="w-full">
-                  Admin
-                </Button>
-              </Link>
-            )}
             <Button variant="outline" className="w-full" onClick={signOut}>
               Log Out
             </Button>

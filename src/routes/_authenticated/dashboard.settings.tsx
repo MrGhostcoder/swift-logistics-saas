@@ -18,14 +18,12 @@ function Settings() {
   const qc = useQueryClient();
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
-  const [company, setCompany] = useState("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (profile) {
       setFullName(profile.full_name ?? "");
       setPhone(profile.phone ?? "");
-      setCompany(profile.company ?? "");
     }
   }, [profile]);
 
@@ -35,7 +33,7 @@ function Settings() {
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
-      .update({ full_name: fullName, phone, company })
+      .update({ full_name: fullName, phone })
       .eq("id", user.id);
     setSaving(false);
     if (error) {
@@ -71,10 +69,6 @@ function Settings() {
         <div>
           <Label>Phone</Label>
           <Input className="mt-1.5" value={phone} onChange={(e) => setPhone(e.target.value)} />
-        </div>
-        <div>
-          <Label>Company</Label>
-          <Input className="mt-1.5" value={company} onChange={(e) => setCompany(e.target.value)} />
         </div>
         <Button disabled={saving}>{saving ? "Saving…" : "Save Changes"}</Button>
       </form>

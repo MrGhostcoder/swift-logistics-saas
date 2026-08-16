@@ -5,7 +5,19 @@ import { Button } from "@/components/ui/button";
 import { EmptyState, Skeletons } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useAuth";
-import { formatCurrency, formatDate, PAYMENT_LABEL, paymentClass } from "@/lib/swift";
+import { formatDate, formatNaira } from "@/lib/swift";
+
+const PAYMENT_LABEL: Record<string, string> = {
+  pending: "Pending Verification",
+  approved: "Approved",
+  rejected: "Rejected",
+};
+
+function paymentClass(status: string) {
+  if (status === "approved") return "bg-success/10 text-success";
+  if (status === "rejected") return "bg-destructive/10 text-destructive";
+  return "bg-primary/10 text-primary";
+}
 
 export const Route = createFileRoute("/_authenticated/dashboard/payments")({
   component: Payments,
@@ -67,7 +79,7 @@ function Payments() {
                   <td className="px-4 py-3 font-medium">
                     {(p.plans as { name: string } | null)?.name ?? "—"}
                   </td>
-                  <td className="px-4 py-3">{formatCurrency(p.amount)}</td>
+                  <td className="px-4 py-3">{formatNaira(p.amount)}</td>
                   <td className="px-4 py-3 font-mono text-xs">{p.reference ?? "—"}</td>
                   <td className="px-4 py-3">
                     <span
