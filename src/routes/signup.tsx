@@ -70,21 +70,23 @@ function SignupPage() {
         <div className="surface mt-6 p-7">
           <h1 className="text-2xl font-extrabold">Create your account</h1>
           <form className="mt-6 space-y-4" onSubmit={submit}>
-            {[
-              ["full_name", "Full Name", "text"],
-              ["email", "Email", "email"],
-              ["phone", "Phone Number", "tel"],
-              ["password", "Password", "password"],
-              ["confirm", "Confirm Password", "password"],
-            ].map(([key, label, type]) => (
-              <div key={key}>
-                <Label htmlFor={key}>{label}</Label>
+            {(
+              [
+                { key: "full_name", label: "Full Name", type: "text" },
+                { key: "email", label: "Email", type: "email" },
+                { key: "phone", label: "Phone Number", type: "tel" },
+                { key: "password", label: "Password", type: "password" },
+                { key: "confirm", label: "Confirm Password", type: "password" },
+              ] as const
+            ).map((f) => (
+              <div key={f.key}>
+                <Label htmlFor={f.key}>{f.label}</Label>
                 <Input
-                  id={key}
-                  type={type}
+                  id={f.key}
+                  type={f.type}
                   required
-                  value={(form as Record<string, string>)[key] ?? ""}
-                  onChange={(e) => set(key, e.target.value)}
+                  value={form[f.key]}
+                  onChange={(e) => set(f.key, e.target.value)}
                   className="mt-1.5"
                 />
               </div>
