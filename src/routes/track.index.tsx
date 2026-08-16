@@ -38,7 +38,10 @@ function TrackSearch() {
           onSubmit={(e) => {
             e.preventDefault();
             const v = code.trim().toUpperCase();
-            if (!v) return toast.error("Please enter a tracking code.");
+            if (!v) {
+              toast.error("Please enter a tracking code.");
+              return;
+            }
             navigate({ to: "/track/$code", params: { code: v } });
           }}
         >
