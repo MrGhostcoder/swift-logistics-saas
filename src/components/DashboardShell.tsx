@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 import { Logo, TelegramButton } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsAdmin } from "@/hooks/useAuth";
 
 export type NavItem = { to: string; label: string };
 
@@ -18,6 +19,7 @@ export function DashboardShell({
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
+  const { data: isAdmin } = useIsAdmin();
 
   async function signOut() {
     await qc.cancelQueries();
