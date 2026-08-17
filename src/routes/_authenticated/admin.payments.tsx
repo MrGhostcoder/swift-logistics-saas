@@ -66,7 +66,10 @@ function AdminPayments() {
     }
     const key = path.includes("/receipts/") ? (path.split("/receipts/")[1] ?? path) : path;
     const { data, error } = await supabase.storage.from("receipts").createSignedUrl(key, 300);
-    if (error || !data) return toast.error("Could not open receipt.");
+    if (error || !data) {
+      toast.error("Could not open receipt.");
+      return;
+    }
     window.open(data.signedUrl, "_blank", "noopener");
   }
 
