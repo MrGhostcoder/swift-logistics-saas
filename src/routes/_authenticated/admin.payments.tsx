@@ -23,10 +23,15 @@ function AdminPayments() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("payments")
-        .select("*, plans(name), profiles:user_id(full_name, email)")
+        .select("*, plans(name)")
         .order("created_at", { ascending: false });
       if (error) throw error;
-      return data;
+      const ids = Array.from(new Set((data ?? []).map((p) => p.user_id)));
+      const { data: people } = ids.length
+        ? await supabase.from("profiles").select("id, full_name, email").in("id", ids)
+        : { data: [] };
+      const byId = new Map((people ?? []).map((u) => [u.id, u]));
+      return (data ?? []).map((p) => ({ ...p, customer: byId.get(p.user_id) ?? null }));
     },
   });
 
@@ -55,8 +60,11 @@ function AdminPayments() {
   });
 
   async function viewReceipt(path: string | null) {
-    if (!path) return toast.error("No receipt uploaded.");
-    const key = path.includes("/receipts/") ? path.split("/receipts/")[1] : path;
+    if (!path) {
+      toast.error("No receipt uploaded.");
+      return;
+    }
+    const key = path.includes("/receipts/") ? (path.split("/receipts/")[1] ?? path) : path;
     const { data, error } = await supabase.storage.from("receipts").createSignedUrl(key, 300);
     if (error || !data) return toast.error("Could not open receipt.");
     window.open(data.signedUrl, "_blank", "noopener");
@@ -96,7 +104,7 @@ function AdminPayments() {
       ) : (
         <div className="space-y-3">
           {rows.map((p) => {
-            const customer = p.profiles as { full_name: string; email: string } | null;
+            const customer = p.customer;
             return (
               <div key={p.id} className="surface p-5">
                 <div className="flex flex-wrap items-start justify-between gap-4">

@@ -22,10 +22,9 @@ function AdminLayout() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && isAdmin === false) {
-      const t = setTimeout(() => navigate({ to: "/dashboard", replace: true }), 1200);
-      return () => clearTimeout(t);
-    }
+    if (isLoading || isAdmin !== false) return;
+    const t = setTimeout(() => navigate({ to: "/dashboard", replace: true }), 1200);
+    return () => clearTimeout(t);
   }, [isAdmin, isLoading, navigate]);
 
   return (
