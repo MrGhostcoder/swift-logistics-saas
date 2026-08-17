@@ -38,6 +38,14 @@ export function DashboardShell({
                 Dashboard
               </Button>
             </Link>
+            {isAdmin && (
+              <Link to="/admin">
+                <Button variant="ghost" size="sm">
+                  Admin
+                </Button>
+              </Link>
+            )}
+
             <a href="/#features">
               <Button variant="ghost" size="sm">
                 Help
