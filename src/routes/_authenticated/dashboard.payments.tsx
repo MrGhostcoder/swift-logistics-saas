@@ -54,7 +54,7 @@ function Payments() {
         <EmptyState
           icon={Receipt}
           title="No payments yet"
-          description="Choose a plan and upload your bank transfer receipt to get started."
+          description="Choose a plan and submit your USDT payment to get started."
           action={
             <Link to="/pricing">
               <Button>View Plans</Button>

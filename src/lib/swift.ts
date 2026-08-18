@@ -52,8 +52,6 @@ export function formatUsdt(value: number | string) {
   return `${(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 })} USDT`;
 }
 
-/** @deprecated use formatUsdt */
-export const formatNaira = formatUsdt;
 
 export function formatDate(value?: string | null) {
   if (!value) return "—";

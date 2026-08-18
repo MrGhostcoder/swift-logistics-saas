@@ -15,13 +15,13 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/checkout/$planId")({
   head: () => ({
     meta: [
-      { title: "Bank Transfer Checkout — SwiftTrack" },
+      { title: "USDT Checkout — SwiftTrack" },
       {
         name: "description",
-        content: "Complete your SwiftTrack plan purchase by bank transfer and upload your receipt.",
+        content: "Complete your SwiftTrack plan purchase by sending USDT and submitting your transaction hash.",
       },
-      { property: "og:title", content: "Bank Transfer Checkout — SwiftTrack" },
-      { property: "og:description", content: "Pay for your SwiftTrack tracking plan by bank transfer." },
+      { property: "og:title", content: "USDT Checkout — SwiftTrack" },
+      { property: "og:description", content: "Pay for your SwiftTrack tracking plan with USDT." },
     ],
   }),
   component: Checkout,
