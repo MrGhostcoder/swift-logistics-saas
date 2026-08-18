@@ -36,6 +36,7 @@ function Checkout() {
   const [step, setStep] = useState<"instructions" | "proof" | "done">("instructions");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [txHash, setTxHash] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -68,7 +69,7 @@ function Checkout() {
         user_id: user.id,
         plan_id: planId,
         amount: Number(amount || plan?.price || 0),
-        reference,
+        reference: txHash.trim() ? `${reference} · ${txHash.trim()}` : reference,
         payment_date: date,
         receipt_url: receiptPath,
       });
@@ -107,7 +108,7 @@ function Checkout() {
             <p className="mt-2 text-sm text-muted-foreground">
               We received your payment submission with reference{" "}
               <span className="font-mono font-semibold">{reference}</span>. Your {plan.name} plan
-              activates as soon as an admin verifies the transfer.
+              activates as soon as an admin verifies the USDT transaction on-chain.
             </p>
             <Link to="/dashboard/payments" className="mt-6 inline-block">
               <Button>View payment history</Button>
@@ -151,21 +152,32 @@ function Checkout() {
 
             {step === "proof" && (
               <form className="surface space-y-4 p-6 sm:p-8" onSubmit={submitPayment}>
-                <h2 className="text-lg font-bold">Upload payment proof</h2>
+                <h2 className="text-lg font-bold">Confirm your USDT payment</h2>
                 <div>
                   <Label>Payment Reference</Label>
                   <Input value={reference} readOnly className="mt-1.5 font-mono" />
                 </div>
                 <div>
-                  <Label htmlFor="amount">Amount</Label>
+                  <Label htmlFor="amount">Amount Sent (USDT)</Label>
                   <Input
                     id="amount"
                     type="number"
+                    step="0.01"
                     required
                     placeholder={String(plan.price)}
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     className="mt-1.5"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="txhash">Transaction Hash (TXID)</Label>
+                  <Input
+                    id="txhash"
+                    placeholder="e.g. 9f3a…"
+                    value={txHash}
+                    onChange={(e) => setTxHash(e.target.value)}
+                    className="mt-1.5 font-mono"
                   />
                 </div>
                 <div>
@@ -180,7 +192,7 @@ function Checkout() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="receipt">Upload Payment Receipt</Label>
+                  <Label htmlFor="receipt">Upload Transaction Screenshot</Label>
                   <Input
                     id="receipt"
                     type="file"
