@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Building2, Check, Clock } from "lucide-react";
+import { Check, Clock, Wallet } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Skeletons } from "@/components/brand";
 import { Button } from "@/components/ui/button";
