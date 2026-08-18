@@ -29,6 +29,28 @@ export const Route = createFileRoute("/track/$code")({
   component: TrackDetail,
 });
 
+type PublicTracking = {
+  tc: {
+    id: string;
+    code: string;
+    status: ShipStatus;
+    package_name: string | null;
+    package_category: string | null;
+    weight: string | null;
+    sender_name: string | null;
+    recipient_name: string | null;
+    origin: string | null;
+    destination: string | null;
+    pickup_address: string | null;
+    delivery_address: string | null;
+    shipping_method: string | null;
+    estimated_delivery: string | null;
+    current_location: string | null;
+  };
+  events: { id: string; status: string; title: string; location: string | null; occurred_at: string }[];
+  messages: { id: string; sender_name: string; sender_type: string; body: string; created_at: string }[];
+};
+
 function TrackDetail() {
   const { code } = Route.useParams();
   const qc = useQueryClient();
@@ -43,13 +65,10 @@ function TrackDetail() {
       });
       if (error) throw error;
       if (!result) return null;
-      return result as unknown as {
-        tc: Record<string, string | null>;
-        events: { id: string; status: string; title: string; location: string | null; occurred_at: string }[];
-        messages: { id: string; sender_name: string; sender_type: string; body: string; created_at: string }[];
-      };
+      return result as unknown as PublicTracking;
     },
   });
+
 
   async function sendMessage(e: React.FormEvent) {
     e.preventDefault();
