@@ -126,21 +126,25 @@ function Checkout() {
 
             <div className="surface p-6 sm:p-8">
               <h2 className="flex items-center gap-2 text-lg font-bold">
-                <Building2 className="h-5 w-5 text-primary" /> Bank Transfer Instructions
+                <Wallet className="h-5 w-5 text-primary" /> USDT Payment Instructions
               </h2>
               <dl className="mt-5 grid gap-4 sm:grid-cols-2">
-                <Field label="Bank Name" value={settings?.["bank_name"] ?? "—"} />
-                <Field label="Account Name" value={settings?.["account_name"] ?? "—"} />
-                <Field label="Account Number" value={settings?.["account_number"] ?? "—"} />
+                <Field label="Network" value={settings?.["usdt_network"] || "TRC20 (Tron)"} />
+                <Field label="USDT Wallet Address" value={settings?.["usdt_address"] || "—"} mono />
+                {settings?.["usdt_memo"] ? (
+                  <Field label="Memo / Tag" value={settings["usdt_memo"]} mono />
+                ) : null}
                 <Field label="Reference" value={reference} mono />
               </dl>
               <p className="mt-4 text-sm text-muted-foreground">
-                Transfer {formatUsdt(Number(plan.price))} and use the reference above so we can
-                match your payment.
+                Send exactly {formatUsdt(Number(plan.price))} to the wallet address above on the{" "}
+                {settings?.["usdt_network"] || "TRC20"} network. Sending on a different network may
+                result in permanent loss of funds. Keep your transaction hash — you will need it on
+                the next step.
               </p>
               {step === "instructions" && (
                 <Button className="mt-6" size="lg" onClick={() => setStep("proof")}>
-                  I have completed the transfer
+                  I have sent the USDT
                 </Button>
               )}
             </div>
