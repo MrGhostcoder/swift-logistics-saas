@@ -6,7 +6,7 @@ import { Receipt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { EmptyState, Skeletons } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
-import { formatDate, formatNaira } from "@/lib/swift";
+import { formatDate, formatUsdt } from "@/lib/swift";
 
 export const Route = createFileRoute("/_authenticated/admin/payments")({
   component: AdminPayments,
@@ -120,7 +120,7 @@ function AdminPayments() {
                     </p>
                     <p className="text-sm text-muted-foreground">
                       {(p.plans as { name: string } | null)?.name ?? "—"} ·{" "}
-                      {formatNaira(p.amount)} · Ref{" "}
+                      {formatUsdt(p.amount)} · Ref{" "}
                       <span className="font-mono">{p.reference}</span>
                     </p>
                     <p className="text-xs text-muted-foreground">

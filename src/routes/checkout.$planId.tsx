@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession, useCheckoutSettings } from "@/hooks/useAuth";
-import { formatNaira, generatePaymentRef } from "@/lib/swift";
+import { formatUsdt, generatePaymentRef } from "@/lib/swift";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/checkout/$planId")({
@@ -119,7 +119,7 @@ function Checkout() {
               <h1 className="text-2xl font-extrabold">Complete your purchase</h1>
               <div className="mt-5 grid gap-4 sm:grid-cols-3">
                 <Field label="Selected Plan" value={plan.name} />
-                <Field label="Plan Price" value={formatNaira(Number(plan.price))} />
+                <Field label="Plan Price" value={formatUsdt(Number(plan.price))} />
                 <Field label="Tracking Codes" value={`${plan.code_limit} codes`} />
               </div>
             </div>
@@ -135,7 +135,7 @@ function Checkout() {
                 <Field label="Reference" value={reference} mono />
               </dl>
               <p className="mt-4 text-sm text-muted-foreground">
-                Transfer {formatNaira(Number(plan.price))} and use the reference above so we can
+                Transfer {formatUsdt(Number(plan.price))} and use the reference above so we can
                 match your payment.
               </p>
               {step === "instructions" && (
