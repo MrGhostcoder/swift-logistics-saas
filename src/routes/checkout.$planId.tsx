@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { useSession, useSettings } from "@/hooks/useAuth";
+import { useSession, useCheckoutSettings } from "@/hooks/useAuth";
 import { formatNaira, generatePaymentRef } from "@/lib/swift";
 import { toast } from "sonner";
 
@@ -31,7 +31,7 @@ function Checkout() {
   const { planId } = Route.useParams();
   const { user } = useSession();
   const navigate = useNavigate();
-  const { data: settings } = useSettings();
+  const { data: settings } = useCheckoutSettings();
   const reference = useMemo(() => generatePaymentRef(), []);
   const [step, setStep] = useState<"instructions" | "proof" | "done">("instructions");
   const [amount, setAmount] = useState("");

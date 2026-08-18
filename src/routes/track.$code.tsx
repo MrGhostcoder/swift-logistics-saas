@@ -29,6 +29,28 @@ export const Route = createFileRoute("/track/$code")({
   component: TrackDetail,
 });
 
+type PublicTracking = {
+  tc: {
+    id: string;
+    code: string;
+    status: ShipStatus;
+    package_name: string | null;
+    package_category: string | null;
+    weight: string | null;
+    sender_name: string | null;
+    recipient_name: string | null;
+    origin: string | null;
+    destination: string | null;
+    pickup_address: string | null;
+    delivery_address: string | null;
+    shipping_method: string | null;
+    estimated_delivery: string | null;
+    current_location: string | null;
+  };
+  events: { id: string; status: string; title: string; location: string | null; occurred_at: string }[];
+  messages: { id: string; sender_name: string; sender_type: string; body: string; created_at: string }[];
+};
+
 function TrackDetail() {
   const { code } = Route.useParams();
   const qc = useQueryClient();
@@ -38,35 +60,23 @@ function TrackDetail() {
   const { data, isLoading } = useQuery({
     queryKey: ["track", code],
     queryFn: async () => {
-      const { data: tc, error } = await supabase
-        .from("tracking_codes")
-        .select("*")
-        .eq("code", code.toUpperCase())
-        .maybeSingle();
+      const { data: result, error } = await supabase.rpc("get_public_tracking", {
+        _code: code.toUpperCase(),
+      });
       if (error) throw error;
-      if (!tc) return null;
-      const { data: events } = await supabase
-        .from("tracking_events")
-        .select("*")
-        .eq("tracking_code_id", tc.id)
-        .order("occurred_at", { ascending: true });
-      const { data: messages } = await supabase
-        .from("messages")
-        .select("*")
-        .eq("tracking_code_id", tc.id)
-        .order("created_at", { ascending: true });
-      return { tc, events: events ?? [], messages: messages ?? [] };
+      if (!result) return null;
+      return result as unknown as PublicTracking;
     },
   });
+
 
   async function sendMessage(e: React.FormEvent) {
     e.preventDefault();
     if (!data?.tc || !body.trim()) return;
-    const { error } = await supabase.from("messages").insert({
-      tracking_code_id: data.tc.id,
-      sender_name: name.trim() || "Recipient",
-      sender_type: "recipient",
-      body: body.trim(),
+    const { error } = await supabase.rpc("send_public_message", {
+      _code: code.toUpperCase(),
+      _sender_name: name.trim() || "Recipient",
+      _body: body.trim(),
     });
     if (error) {
       toast.error("Could not send your message. Please try again.");
@@ -76,6 +86,7 @@ function TrackDetail() {
     toast.success("Message sent to the sender.");
     qc.invalidateQueries({ queryKey: ["track", code] });
   }
+
 
   const url = trackingUrl(code.toUpperCase());
 
