@@ -68,9 +68,9 @@ export function useIsAdmin() {
 
 export function useSettings() {
   return useQuery({
-    queryKey: ["admin-settings"],
+    queryKey: ["public-settings"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("admin_settings").select("*");
+      const { data, error } = await supabase.rpc("get_public_settings");
       if (error) throw error;
       const map: Record<string, string> = {};
       (data ?? []).forEach((r) => (map[r.key] = r.value));
@@ -78,3 +78,19 @@ export function useSettings() {
     },
   });
 }
+
+export function useCheckoutSettings() {
+  const { user } = useSession();
+  return useQuery({
+    queryKey: ["checkout-settings", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_checkout_settings");
+      if (error) throw error;
+      const map: Record<string, string> = {};
+      (data ?? []).forEach((r) => (map[r.key] = r.value));
+      return map;
+    },
+  });
+}
+
