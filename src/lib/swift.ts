@@ -47,10 +47,13 @@ export function generatePaymentRef() {
   return `STK-PAY-${Math.floor(100000 + Math.random() * 900000)}`;
 }
 
-export function formatNaira(value: number | string) {
+export function formatUsdt(value: number | string) {
   const n = typeof value === "string" ? Number(value) : value;
-  return `₦${(n || 0).toLocaleString("en-NG")}`;
+  return `${(n || 0).toLocaleString("en-US", { maximumFractionDigits: 2 })} USDT`;
 }
+
+/** @deprecated use formatUsdt */
+export const formatNaira = formatUsdt;
 
 export function formatDate(value?: string | null) {
   if (!value) return "—";
