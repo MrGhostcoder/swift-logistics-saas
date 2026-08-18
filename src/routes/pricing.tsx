@@ -90,7 +90,7 @@ function Pricing() {
                     size="lg"
                     variant={plan.is_popular ? "default" : "outline"}
                   >
-                    Pay by Bank Transfer
+                    Pay with USDT
                   </Button>
                 </Link>
               </div>
