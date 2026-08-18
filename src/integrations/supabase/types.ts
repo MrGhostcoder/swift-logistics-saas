@@ -426,6 +426,21 @@ export type Database = {
     }
     Functions: {
       approve_payment: { Args: { _payment_id: string }; Returns: undefined }
+      get_checkout_settings: {
+        Args: never
+        Returns: {
+          key: string
+          value: string
+        }[]
+      }
+      get_public_settings: {
+        Args: never
+        Returns: {
+          key: string
+          value: string
+        }[]
+      }
+      get_public_tracking: { Args: { _code: string }; Returns: Json }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -435,6 +450,10 @@ export type Database = {
       }
       reject_payment: {
         Args: { _note: string; _payment_id: string }
+        Returns: undefined
+      }
+      send_public_message: {
+        Args: { _body: string; _code: string; _sender_name: string }
         Returns: undefined
       }
     }
