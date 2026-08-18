@@ -4,7 +4,7 @@ import { Users, Package, Receipt, Wallet, Truck, MapPinCheck } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { Skeletons, StatusBadge } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
-import { formatDate, formatNaira } from "@/lib/swift";
+import { formatDate, formatUsdt } from "@/lib/swift";
 
 export const Route = createFileRoute("/_authenticated/admin/")({
   component: AdminOverview,
@@ -63,7 +63,7 @@ function AdminOverview() {
         <Stat icon={Users} label="Total Users" value={String(data.profiles.length)} tone="text-primary" />
         <Stat icon={Package} label="Tracking Codes" value={String(data.codes.length)} tone="text-foreground" />
         <Stat icon={Receipt} label="Pending Payments" value={String(pendingPayments.length)} tone="text-primary" />
-        <Stat icon={Wallet} label="Approved Revenue" value={formatNaira(revenue)} tone="text-success" />
+        <Stat icon={Wallet} label="Approved Revenue" value={formatUsdt(revenue)} tone="text-success" />
         <Stat icon={Truck} label="In Transit" value={String(inTransit)} tone="text-telegram" />
         <Stat icon={MapPinCheck} label="Delivered" value={String(delivered)} tone="text-success" />
       </div>

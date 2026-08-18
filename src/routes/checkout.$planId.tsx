@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
-import { Building2, Check, Clock } from "lucide-react";
+import { Check, Clock, Wallet } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Skeletons } from "@/components/brand";
 import { Button } from "@/components/ui/button";
@@ -9,19 +9,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession, useCheckoutSettings } from "@/hooks/useAuth";
-import { formatNaira, generatePaymentRef } from "@/lib/swift";
+import { formatUsdt, generatePaymentRef } from "@/lib/swift";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/checkout/$planId")({
   head: () => ({
     meta: [
-      { title: "Bank Transfer Checkout — SwiftTrack" },
+      { title: "USDT Checkout — SwiftTrack" },
       {
         name: "description",
-        content: "Complete your SwiftTrack plan purchase by bank transfer and upload your receipt.",
+        content: "Complete your SwiftTrack plan purchase by sending USDT and submitting your transaction hash.",
       },
-      { property: "og:title", content: "Bank Transfer Checkout — SwiftTrack" },
-      { property: "og:description", content: "Pay for your SwiftTrack tracking plan by bank transfer." },
+      { property: "og:title", content: "USDT Checkout — SwiftTrack" },
+      { property: "og:description", content: "Pay for your SwiftTrack tracking plan with USDT." },
     ],
   }),
   component: Checkout,
@@ -36,6 +36,7 @@ function Checkout() {
   const [step, setStep] = useState<"instructions" | "proof" | "done">("instructions");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
+  const [txHash, setTxHash] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -68,7 +69,7 @@ function Checkout() {
         user_id: user.id,
         plan_id: planId,
         amount: Number(amount || plan?.price || 0),
-        reference,
+        reference: txHash.trim() ? `${reference} · ${txHash.trim()}` : reference,
         payment_date: date,
         receipt_url: receiptPath,
       });
@@ -107,7 +108,7 @@ function Checkout() {
             <p className="mt-2 text-sm text-muted-foreground">
               We received your payment submission with reference{" "}
               <span className="font-mono font-semibold">{reference}</span>. Your {plan.name} plan
-              activates as soon as an admin verifies the transfer.
+              activates as soon as an admin verifies the USDT transaction on-chain.
             </p>
             <Link to="/dashboard/payments" className="mt-6 inline-block">
               <Button>View payment history</Button>
@@ -119,49 +120,64 @@ function Checkout() {
               <h1 className="text-2xl font-extrabold">Complete your purchase</h1>
               <div className="mt-5 grid gap-4 sm:grid-cols-3">
                 <Field label="Selected Plan" value={plan.name} />
-                <Field label="Plan Price" value={formatNaira(Number(plan.price))} />
+                <Field label="Plan Price" value={formatUsdt(Number(plan.price))} />
                 <Field label="Tracking Codes" value={`${plan.code_limit} codes`} />
               </div>
             </div>
 
             <div className="surface p-6 sm:p-8">
               <h2 className="flex items-center gap-2 text-lg font-bold">
-                <Building2 className="h-5 w-5 text-primary" /> Bank Transfer Instructions
+                <Wallet className="h-5 w-5 text-primary" /> USDT Payment Instructions
               </h2>
               <dl className="mt-5 grid gap-4 sm:grid-cols-2">
-                <Field label="Bank Name" value={settings?.["bank_name"] ?? "—"} />
-                <Field label="Account Name" value={settings?.["account_name"] ?? "—"} />
-                <Field label="Account Number" value={settings?.["account_number"] ?? "—"} />
+                <Field label="Network" value={settings?.["usdt_network"] || "TRC20 (Tron)"} />
+                <Field label="USDT Wallet Address" value={settings?.["usdt_address"] || "—"} mono />
+                {settings?.["usdt_memo"] ? (
+                  <Field label="Memo / Tag" value={settings["usdt_memo"]} mono />
+                ) : null}
                 <Field label="Reference" value={reference} mono />
               </dl>
               <p className="mt-4 text-sm text-muted-foreground">
-                Transfer {formatNaira(Number(plan.price))} and use the reference above so we can
-                match your payment.
+                Send exactly {formatUsdt(Number(plan.price))} to the wallet address above on the{" "}
+                {settings?.["usdt_network"] || "TRC20"} network. Sending on a different network may
+                result in permanent loss of funds. Keep your transaction hash — you will need it on
+                the next step.
               </p>
               {step === "instructions" && (
                 <Button className="mt-6" size="lg" onClick={() => setStep("proof")}>
-                  I have completed the transfer
+                  I have sent the USDT
                 </Button>
               )}
             </div>
 
             {step === "proof" && (
               <form className="surface space-y-4 p-6 sm:p-8" onSubmit={submitPayment}>
-                <h2 className="text-lg font-bold">Upload payment proof</h2>
+                <h2 className="text-lg font-bold">Confirm your USDT payment</h2>
                 <div>
                   <Label>Payment Reference</Label>
                   <Input value={reference} readOnly className="mt-1.5 font-mono" />
                 </div>
                 <div>
-                  <Label htmlFor="amount">Amount</Label>
+                  <Label htmlFor="amount">Amount Sent (USDT)</Label>
                   <Input
                     id="amount"
                     type="number"
+                    step="0.01"
                     required
                     placeholder={String(plan.price)}
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     className="mt-1.5"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="txhash">Transaction Hash (TXID)</Label>
+                  <Input
+                    id="txhash"
+                    placeholder="e.g. 9f3a…"
+                    value={txHash}
+                    onChange={(e) => setTxHash(e.target.value)}
+                    className="mt-1.5 font-mono"
                   />
                 </div>
                 <div>
@@ -176,7 +192,7 @@ function Checkout() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="receipt">Upload Payment Receipt</Label>
+                  <Label htmlFor="receipt">Upload Transaction Screenshot</Label>
                   <Input
                     id="receipt"
                     type="file"

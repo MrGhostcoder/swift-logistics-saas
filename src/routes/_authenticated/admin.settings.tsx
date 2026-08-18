@@ -13,9 +13,9 @@ export const Route = createFileRoute("/_authenticated/admin/settings")({
 });
 
 const FIELDS: { key: string; label: string }[] = [
-  { key: "bank_name", label: "Bank Name" },
-  { key: "account_name", label: "Account Name" },
-  { key: "account_number", label: "Account Number" },
+  { key: "usdt_network", label: "USDT Network (e.g. TRC20 (Tron))" },
+  { key: "usdt_address", label: "USDT Wallet Address" },
+  { key: "usdt_memo", label: "Memo / Tag (optional)" },
   { key: "telegram_url", label: "Telegram Channel URL" },
   { key: "support_url", label: "Support Chat URL" },
 ];
@@ -60,7 +60,7 @@ function AdminSettings() {
       <div>
         <h1 className="text-2xl font-extrabold">Platform Settings</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Bank transfer details and support links shown to customers.
+          USDT wallet details and support links shown to customers.
         </p>
       </div>
 

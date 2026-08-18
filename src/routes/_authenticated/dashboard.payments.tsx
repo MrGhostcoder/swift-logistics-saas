@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState, Skeletons } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@/hooks/useAuth";
-import { formatDate, formatNaira } from "@/lib/swift";
+import { formatDate, formatUsdt } from "@/lib/swift";
 
 const PAYMENT_LABEL: Record<string, string> = {
   pending: "Pending Verification",
@@ -54,7 +54,7 @@ function Payments() {
         <EmptyState
           icon={Receipt}
           title="No payments yet"
-          description="Choose a plan and upload your bank transfer receipt to get started."
+          description="Choose a plan and submit your USDT payment to get started."
           action={
             <Link to="/pricing">
               <Button>View Plans</Button>
@@ -79,7 +79,7 @@ function Payments() {
                   <td className="px-4 py-3 font-medium">
                     {(p.plans as { name: string } | null)?.name ?? "—"}
                   </td>
-                  <td className="px-4 py-3">{formatNaira(p.amount)}</td>
+                  <td className="px-4 py-3">{formatUsdt(p.amount)}</td>
                   <td className="px-4 py-3 font-mono text-xs">{p.reference ?? "—"}</td>
                   <td className="px-4 py-3">
                     <span

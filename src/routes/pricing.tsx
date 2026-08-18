@@ -5,7 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Skeletons } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
-import { formatNaira } from "@/lib/swift";
+import { formatUsdt } from "@/lib/swift";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -68,7 +68,7 @@ function Pricing() {
                   </span>
                 )}
                 <h2 className="text-lg font-bold">{plan.name}</h2>
-                <p className="mt-3 text-4xl font-extrabold">{formatNaira(Number(plan.price))}</p>
+                <p className="mt-3 text-4xl font-extrabold">{formatUsdt(Number(plan.price))}</p>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {plan.code_limit} tracking codes
                 </p>
@@ -90,7 +90,7 @@ function Pricing() {
                     size="lg"
                     variant={plan.is_popular ? "default" : "outline"}
                   >
-                    Pay by Bank Transfer
+                    Pay with USDT
                   </Button>
                 </Link>
               </div>
