@@ -50,7 +50,7 @@ function AdminUsers() {
     },
   });
 
-  async function run(key: string, fn: () => Promise<{ error: unknown }>, ok: string) {
+  async function run(key: string, fn: () => PromiseLike<{ error: unknown }>, ok: string) {
     setBusy(key);
     const { error } = await fn();
     setBusy(null);
