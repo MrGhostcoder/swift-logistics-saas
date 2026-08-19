@@ -425,6 +425,25 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_list_roles: {
+        Args: never
+        Returns: {
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }[]
+      }
+      admin_set_account_status: {
+        Args: { _status: string; _user_id: string }
+        Returns: undefined
+      }
+      admin_set_admin_role: {
+        Args: { _grant: boolean; _user_id: string }
+        Returns: undefined
+      }
+      admin_set_codes: {
+        Args: { _codes_total: number; _user_id: string }
+        Returns: undefined
+      }
       approve_payment: { Args: { _payment_id: string }; Returns: undefined }
       get_checkout_settings: {
         Args: never
