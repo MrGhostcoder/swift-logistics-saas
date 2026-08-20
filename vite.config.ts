@@ -6,7 +6,12 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// When the build runs on Netlify (NETLIFY=true is always set there), pin Nitro to the
+// Netlify preset so the SSR server is emitted as a Netlify function.
+const isNetlify = !!process.env["NETLIFY"] || process.env["NITRO_PRESET"] === "netlify";
+
 export default defineConfig({
+  ...(isNetlify ? { nitro: { preset: "netlify" as const } } : {}),
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
