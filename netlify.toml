@@ -1,0 +1,10 @@
+[build]
+  command = "npm run build"
+  publish = "dist/client"
+
+[build.environment]
+  NODE_VERSION = "22"
+  NITRO_PRESET = "netlify"
+
+# Nitro emits the SSR handler as a Netlify function and writes the routing
+# redirects itself, so no manual [[redirects]] are needed here.
