@@ -7,17 +7,18 @@ import { useSession } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 
-const links = [
+const allLinks = [
   { to: "/#features", label: "Features", hash: true },
   { to: "/pricing", label: "Pricing" },
   { to: "/track", label: "Track Package" },
 ];
 
-export function SiteHeader() {
+export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
   const [open, setOpen] = useState(false);
   const { user } = useSession();
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const links = minimal ? allLinks.filter((l) => l.label === "Track Package") : allLinks;
 
   async function signOut() {
     await qc.cancelQueries();
@@ -31,7 +32,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Logo />
         <nav className="hidden items-center gap-1 md:flex">
-          <TelegramButton className="mr-2" />
+          {!minimal && <TelegramButton className="mr-2" />}
           {links.map((l) =>
             l.hash ? (
               <a
