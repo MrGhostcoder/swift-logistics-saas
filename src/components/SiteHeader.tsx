@@ -61,7 +61,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
                 Log Out
               </Button>
             </>
-          ) : (
+          ) : minimal ? null : (
             <>
               <Link to="/login">
                 <Button size="sm" variant="ghost">
@@ -73,6 +73,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
               </Link>
             </>
           )}
+
         </nav>
         <button
           className="rounded-lg border border-border p-2 md:hidden"
@@ -85,7 +86,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
       {open && (
         <div className="border-t border-border bg-card px-4 py-4 md:hidden">
           <div className="flex flex-col gap-2">
-            <TelegramButton className="w-full" />
+            {!minimal && <TelegramButton className="w-full" />}
             {links.map((l) =>
               l.hash ? (
                 <a
@@ -116,7 +117,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
                   Log Out
                 </Button>
               </>
-            ) : (
+            ) : minimal ? null : (
               <>
                 <Link to="/login" onClick={() => setOpen(false)}>
                   <Button variant="outline" className="w-full">
@@ -128,6 +129,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
                 </Link>
               </>
             )}
+
           </div>
         </div>
       )}
