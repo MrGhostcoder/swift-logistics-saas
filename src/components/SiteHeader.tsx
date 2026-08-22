@@ -117,7 +117,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
                   Log Out
                 </Button>
               </>
-            ) : (
+            ) : minimal ? null : (
               <>
                 <Link to="/login" onClick={() => setOpen(false)}>
                   <Button variant="outline" className="w-full">
@@ -129,6 +129,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
                 </Link>
               </>
             )}
+
           </div>
         </div>
       )}
