@@ -61,7 +61,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
                 Log Out
               </Button>
             </>
-          ) : (
+          ) : minimal ? null : (
             <>
               <Link to="/login">
                 <Button size="sm" variant="ghost">
@@ -73,6 +73,7 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
               </Link>
             </>
           )}
+
         </nav>
         <button
           className="rounded-lg border border-border p-2 md:hidden"
