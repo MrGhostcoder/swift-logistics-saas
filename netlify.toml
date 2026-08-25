@@ -1,10 +1,11 @@
 [build]
   command = "npm run build"
-  publish = "dist/client"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
   NITRO_PRESET = "netlify"
 
-# Nitro emits the SSR handler as a Netlify function and writes the routing
-# redirects itself, so no manual [[redirects]] are needed here.
+# Nitro's Netlify preset emits public assets to dist and the SSR handler as a
+# Netlify function. It also writes the routing redirects itself, so no manual
+# [[redirects]] are needed here.
