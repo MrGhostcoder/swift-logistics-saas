@@ -26,6 +26,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatDateTime, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
 import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
+import heroVideoWebmAsset from "@/assets/hero-video.webm.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -137,13 +138,15 @@ function Home() {
       <section className="relative overflow-hidden">
         <video
           className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover"
-          src={heroVideoAsset.url}
           autoPlay
           muted
           loop
           playsInline
           aria-hidden="true"
-        />
+        >
+          <source src={heroVideoWebmAsset.url} type="video/webm" />
+          <source src={heroVideoAsset.url} type="video/mp4" />
+        </video>
         <div className="pointer-events-none absolute inset-0 -z-10 bg-background/80 backdrop-blur-[2px]" />
         <div className="grid-fade pointer-events-none absolute inset-0 -z-10" />
 
