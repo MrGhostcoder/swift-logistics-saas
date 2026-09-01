@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatDateTime, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
+import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -280,7 +281,7 @@ function Home() {
                 </div>
               )}
 
-              <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">
+              <ul className="mt-7 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
                 {["Real-time status updates", "Secure tracking", "No account required"].map((t) => (
                   <li key={t} className="flex items-center gap-2">
                     <Check className="h-4 w-4 text-success" />
@@ -288,58 +289,6 @@ function Home() {
                   </li>
                 ))}
               </ul>
-            </div>
-
-            <div className="relative">
-              <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2.5rem] bg-primary/10 blur-3xl" />
-              <div className="surface-elevated relative overflow-hidden p-8">
-                <div className="absolute -right-20 -top-20 h-60 w-60 rounded-full bg-primary/10" />
-                <div className="relative space-y-5">
-                  <div className="flex items-center gap-3">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-[var(--shadow-glow)]">
-                      <Package className="h-6 w-6" />
-                    </span>
-                    <div className="flex-1">
-                      <p className="text-xs font-medium text-muted-foreground">Tracking number</p>
-                      <p className="font-mono text-lg font-bold">STK-839271</p>
-                    </div>
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
-                      <Clock3 className="h-3.5 w-3.5" /> Live
-                    </span>
-                  </div>
-
-                  <div className="relative space-y-5 pl-1">
-                    <span className="absolute left-[9px] top-2 bottom-2 w-px bg-border" />
-                    {[
-                      ["Shipment Created", "Lagos, Nigeria", true],
-                      ["Package Picked Up", "Lagos, Nigeria", true],
-                      ["Arrived at Distribution Center", "Abuja", true],
-                      ["In Transit", "Abuja Distribution Center", false],
-                    ].map(([title, place, done], i) => (
-                      <div key={i} className="relative flex items-start gap-3">
-                        <span
-                          className={`relative z-10 flex h-5 w-5 items-center justify-center rounded-full text-[10px] ring-4 ring-card ${
-                            done
-                              ? "bg-success text-success-foreground"
-                              : "bg-primary text-primary-foreground animate-pulse-ring"
-                          }`}
-                        >
-                          {done ? "✓" : "●"}
-                        </span>
-                        <div>
-                          <p className="text-sm font-semibold">{title as string}</p>
-                          <p className="text-xs text-muted-foreground">{place as string}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="rounded-2xl border border-border bg-muted/50 p-4">
-                    <p className="text-xs text-muted-foreground">Estimated delivery</p>
-                    <p className="text-sm font-bold">Tomorrow, before 6:00 PM</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
