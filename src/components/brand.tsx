@@ -1,15 +1,18 @@
 import { Link } from "@tanstack/react-router";
-import { Package, Send, MessageCircle } from "lucide-react";
+import { Send, MessageCircle } from "lucide-react";
 import { useSettings } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { statusClasses, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
+import iconAsset from "@/assets/swifttrack-icon.png.asset.json";
 
 export function Logo({ to = "/" as string, compact = false }) {
   return (
     <Link to={to} className="flex items-center gap-2.5">
-      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-        <Package className="h-5 w-5" />
-      </span>
+      <img
+        src={iconAsset.url}
+        alt="SwiftTrack logo"
+        className="h-10 w-auto object-contain"
+      />
       {!compact && (
         <span className="text-lg font-extrabold tracking-tight text-foreground">SwiftTrack</span>
       )}
