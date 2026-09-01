@@ -17,7 +17,6 @@ import {
   Globe2,
   Sparkles,
   ArrowRight,
-  Clock3,
 } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { StatusBadge } from "@/components/brand";
@@ -160,7 +159,7 @@ function Home() {
                 <br />
                 with absolute clarity.
               </h1>
-              <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
                 Enter a tracking code to see the live status, route and delivery timeline — no
                 account, no waiting, no guesswork.
               </p>
@@ -196,7 +195,7 @@ function Home() {
               </form>
 
               {notFound && (
-                <div className="surface mt-5 flex items-start gap-3 p-5">
+                <div className="surface mt-5 flex items-start gap-3 p-5 text-left">
                   <PackageX className="mt-0.5 h-5 w-5 text-destructive" />
                   <div>
                     <p className="text-sm font-bold">No shipment found for {notFound}</p>
@@ -208,7 +207,7 @@ function Home() {
               )}
 
               {result && (
-                <div className="surface-elevated animate-rise mt-6 p-6 sm:p-7">
+                <div className="surface-elevated animate-rise mt-6 p-6 text-left sm:p-7">
                   <div className="flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <p className="text-xs font-medium text-muted-foreground">Tracking code</p>
