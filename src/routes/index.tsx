@@ -147,8 +147,7 @@ function Home() {
           <source src={heroVideoWebmAsset.url} type="video/webm" />
           <source src={heroVideoAsset.url} type="video/mp4" />
         </video>
-        <div className="pointer-events-none absolute inset-0 -z-10 bg-background/80 backdrop-blur-[2px]" />
-        <div className="grid-fade pointer-events-none absolute inset-0 -z-10" />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-background/45" />
 
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 sm:pt-24">
           <div className="mx-auto max-w-3xl text-center">
