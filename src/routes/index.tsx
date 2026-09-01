@@ -135,11 +135,20 @@ function Home() {
       <SiteHeader minimal />
 
       <section className="relative overflow-hidden">
-        <div className="hero-aurora pointer-events-none absolute inset-0 -z-10" />
+        <video
+          className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover"
+          src={heroVideoAsset.url}
+          autoPlay
+          muted
+          loop
+          playsInline
+          aria-hidden="true"
+        />
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-background/80 backdrop-blur-[2px]" />
         <div className="grid-fade pointer-events-none absolute inset-0 -z-10" />
 
         <div className="mx-auto max-w-6xl px-4 pb-20 pt-16 sm:pt-24">
-          <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+          <div className="mx-auto max-w-3xl text-center">
             <div className="animate-rise">
               <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3.5 py-1.5 text-xs font-semibold text-muted-foreground backdrop-blur">
                 <span className="flex h-1.5 w-1.5 rounded-full bg-success animate-pulse-ring" />
