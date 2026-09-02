@@ -65,20 +65,43 @@ function Checkout() {
         if (upErr) throw upErr;
         receiptPath = path;
       }
-      const { error } = await supabase.from("payments").insert({
-        user_id: user.id,
-        plan_id: planId,
-        amount: Number(amount || plan?.price || 0),
-        reference: txHash.trim() ? `${reference} · ${txHash.trim()}` : reference,
-        payment_date: date,
-        receipt_url: receiptPath,
-      });
+      const { data: inserted, error } = await supabase
+        .from("payments")
+        .insert({
+          user_id: user.id,
+          plan_id: planId,
+          amount: Number(amount || plan?.price || 0),
+          reference: txHash.trim() ? `${reference} · ${txHash.trim()}` : reference,
+          tx_hash: txHash.trim() || null,
+          payment_date: date,
+          receipt_url: receiptPath,
+        })
+        .select("id")
+        .single();
       if (error) throw error;
       await supabase
         .from("profiles")
         .update({ subscription_status: "PENDING_PAYMENT" })
         .eq("id", user.id);
+
       setStep("done");
+
+      if (txHash.trim() && inserted?.id) {
+        setVerifying(true);
+        try {
+          const res = await verify({ data: { paymentId: inserted.id, txHash: txHash.trim() } });
+          setResult(res);
+          if (res.status === "approved") toast.success(res.message);
+        } catch {
+          setResult({
+            status: "pending",
+            message:
+              "We could not reach the Tron network. An admin will verify your transaction shortly.",
+          });
+        } finally {
+          setVerifying(false);
+        }
+      }
     } catch {
       toast.error("Something went wrong while submitting your payment.");
     } finally {
