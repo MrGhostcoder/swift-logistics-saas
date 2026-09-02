@@ -149,8 +149,11 @@ export type Database = {
           receipt_url: string | null
           reference: string
           status: Database["public"]["Enums"]["pay_status"]
+          tx_hash: string | null
           updated_at: string
           user_id: string
+          verified_at: string | null
+          verified_onchain: boolean
         }
         Insert: {
           admin_note?: string | null
@@ -162,8 +165,11 @@ export type Database = {
           receipt_url?: string | null
           reference: string
           status?: Database["public"]["Enums"]["pay_status"]
+          tx_hash?: string | null
           updated_at?: string
           user_id: string
+          verified_at?: string | null
+          verified_onchain?: boolean
         }
         Update: {
           admin_note?: string | null
@@ -175,8 +181,11 @@ export type Database = {
           receipt_url?: string | null
           reference?: string
           status?: Database["public"]["Enums"]["pay_status"]
+          tx_hash?: string | null
           updated_at?: string
           user_id?: string
+          verified_at?: string | null
+          verified_onchain?: boolean
         }
         Relationships: [
           {
@@ -473,6 +482,10 @@ export type Database = {
       }
       send_public_message: {
         Args: { _body: string; _code: string; _sender_name: string }
+        Returns: undefined
+      }
+      settle_payment_onchain: {
+        Args: { _amount: number; _payment_id: string; _tx_hash: string }
         Returns: undefined
       }
     }
