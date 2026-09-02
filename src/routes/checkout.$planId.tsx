@@ -7,7 +7,9 @@ import { Skeletons } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { verifyUsdtPayment } from "@/lib/payments.functions";
 import { useSession, useCheckoutSettings } from "@/hooks/useAuth";
 import { formatUsdt, generatePaymentRef } from "@/lib/swift";
 import { toast } from "sonner";
@@ -39,6 +41,11 @@ function Checkout() {
   const [txHash, setTxHash] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [result, setResult] = useState<{ status: "approved" | "pending"; message: string } | null>(
+    null,
+  );
+  const verify = useServerFn(verifyUsdtPayment);
 
   const { data: plan, isLoading } = useQuery({
     queryKey: ["plan", planId],
@@ -65,20 +72,43 @@ function Checkout() {
         if (upErr) throw upErr;
         receiptPath = path;
       }
-      const { error } = await supabase.from("payments").insert({
-        user_id: user.id,
-        plan_id: planId,
-        amount: Number(amount || plan?.price || 0),
-        reference: txHash.trim() ? `${reference} · ${txHash.trim()}` : reference,
-        payment_date: date,
-        receipt_url: receiptPath,
-      });
+      const { data: inserted, error } = await supabase
+        .from("payments")
+        .insert({
+          user_id: user.id,
+          plan_id: planId,
+          amount: Number(amount || plan?.price || 0),
+          reference: txHash.trim() ? `${reference} · ${txHash.trim()}` : reference,
+          tx_hash: txHash.trim() || null,
+          payment_date: date,
+          receipt_url: receiptPath,
+        })
+        .select("id")
+        .single();
       if (error) throw error;
       await supabase
         .from("profiles")
         .update({ subscription_status: "PENDING_PAYMENT" })
         .eq("id", user.id);
+
       setStep("done");
+
+      if (txHash.trim() && inserted?.id) {
+        setVerifying(true);
+        try {
+          const res = await verify({ data: { paymentId: inserted.id, txHash: txHash.trim() } });
+          setResult(res);
+          if (res.status === "approved") toast.success(res.message);
+        } catch {
+          setResult({
+            status: "pending",
+            message:
+              "We could not reach the Tron network. An admin will verify your transaction shortly.",
+          });
+        } finally {
+          setVerifying(false);
+        }
+      }
     } catch {
       toast.error("Something went wrong while submitting your payment.");
     } finally {
@@ -101,14 +131,36 @@ function Checkout() {
           </div>
         ) : step === "done" ? (
           <div className="surface p-10 text-center">
-            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-warning/20 text-warning-foreground">
-              <Clock className="h-7 w-7" />
+            <span
+              className={`mx-auto flex h-14 w-14 items-center justify-center rounded-2xl ${
+                result?.status === "approved"
+                  ? "bg-success/20 text-success"
+                  : "bg-warning/20 text-warning-foreground"
+              }`}
+            >
+              {result?.status === "approved" ? (
+                <Check className="h-7 w-7" />
+              ) : (
+                <Clock className="h-7 w-7" />
+              )}
             </span>
-            <h1 className="mt-4 text-2xl font-extrabold">Pending Admin Verification</h1>
+            <h1 className="mt-4 text-2xl font-extrabold">
+              {verifying
+                ? "Verifying on the Tron network…"
+                : result?.status === "approved"
+                  ? "Payment Confirmed"
+                  : "Pending Verification"}
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              We received your payment submission with reference{" "}
-              <span className="font-mono font-semibold">{reference}</span>. Your {plan.name} plan
-              activates as soon as an admin verifies the USDT transaction on-chain.
+              {verifying
+                ? "Checking your transaction hash against the blockchain. This usually takes a few seconds."
+                : result
+                  ? result.message
+                  : "We received your payment submission."}{" "}
+              Reference <span className="font-mono font-semibold">{reference}</span>
+              {result?.status === "approved"
+                ? ` — your ${plan.name} plan is now active.`
+                : ` — your ${plan.name} plan activates as soon as the USDT transaction is confirmed.`}
             </p>
             <Link to="/dashboard/payments" className="mt-6 inline-block">
               <Button>View payment history</Button>
