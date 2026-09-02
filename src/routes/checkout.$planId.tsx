@@ -131,14 +131,36 @@ function Checkout() {
           </div>
         ) : step === "done" ? (
           <div className="surface p-10 text-center">
-            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-warning/20 text-warning-foreground">
-              <Clock className="h-7 w-7" />
+            <span
+              className={`mx-auto flex h-14 w-14 items-center justify-center rounded-2xl ${
+                result?.status === "approved"
+                  ? "bg-success/20 text-success"
+                  : "bg-warning/20 text-warning-foreground"
+              }`}
+            >
+              {result?.status === "approved" ? (
+                <Check className="h-7 w-7" />
+              ) : (
+                <Clock className="h-7 w-7" />
+              )}
             </span>
-            <h1 className="mt-4 text-2xl font-extrabold">Pending Admin Verification</h1>
+            <h1 className="mt-4 text-2xl font-extrabold">
+              {verifying
+                ? "Verifying on the Tron network…"
+                : result?.status === "approved"
+                  ? "Payment Confirmed"
+                  : "Pending Verification"}
+            </h1>
             <p className="mt-2 text-sm text-muted-foreground">
-              We received your payment submission with reference{" "}
-              <span className="font-mono font-semibold">{reference}</span>. Your {plan.name} plan
-              activates as soon as an admin verifies the USDT transaction on-chain.
+              {verifying
+                ? "Checking your transaction hash against the blockchain. This usually takes a few seconds."
+                : result
+                  ? result.message
+                  : "We received your payment submission."}{" "}
+              Reference <span className="font-mono font-semibold">{reference}</span>
+              {result?.status === "approved"
+                ? ` — your ${plan.name} plan is now active.`
+                : ` — your ${plan.name} plan activates as soon as the USDT transaction is confirmed.`}
             </p>
             <Link to="/dashboard/payments" className="mt-6 inline-block">
               <Button>View payment history</Button>
