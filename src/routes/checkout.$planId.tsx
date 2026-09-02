@@ -41,6 +41,11 @@ function Checkout() {
   const [txHash, setTxHash] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [saving, setSaving] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [result, setResult] = useState<{ status: "approved" | "pending"; message: string } | null>(
+    null,
+  );
+  const verify = useServerFn(verifyUsdtPayment);
 
   const { data: plan, isLoading } = useQuery({
     queryKey: ["plan", planId],
