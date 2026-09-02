@@ -135,7 +135,7 @@ function Home() {
     <div className="min-h-screen bg-background">
       <SiteHeader minimal />
 
-      <section className="relative overflow-hidden">
+      <section className="relative isolate overflow-hidden">
         <video
           className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover"
           autoPlay
