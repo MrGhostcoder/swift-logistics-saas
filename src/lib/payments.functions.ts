@@ -59,7 +59,7 @@ export const verifyUsdtPayment = createServerFn({ method: "POST" })
       return { status: "approved" as const, message: "Payment already confirmed." };
     }
 
-    const { data: settings } = await supabase.rpc("get_public_settings");
+    const { data: settings } = await supabase.rpc("get_checkout_settings");
     const wallet = (settings ?? []).find(
       (s: { key: string; value: string }) => s.key === "usdt_address",
     )?.value;
