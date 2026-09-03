@@ -92,7 +92,7 @@ function TrackDetail() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader />
+      <SiteHeader bare />
       <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10">
         {isLoading ? (
           <Skeletons rows={5} />
