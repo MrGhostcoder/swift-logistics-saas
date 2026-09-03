@@ -27,7 +27,7 @@ function TrackSearch() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <SiteHeader />
+      <SiteHeader bare />
       <section className="mx-auto w-full max-w-xl flex-1 px-4 py-20">
         <h1 className="text-center text-3xl font-extrabold">Track a Package</h1>
         <p className="mt-2 text-center text-muted-foreground">

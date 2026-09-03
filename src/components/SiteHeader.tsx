@@ -13,12 +13,18 @@ const allLinks = [
   { to: "/track", label: "Track Package" },
 ];
 
-export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
+export function SiteHeader({
+  minimal = false,
+  bare = false,
+}: {
+  minimal?: boolean;
+  bare?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const { user } = useSession();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const links = minimal ? allLinks.filter((l) => l.label === "Track Package") : allLinks;
+  const links = bare ? [] : minimal ? allLinks.filter((l) => l.label === "Track Package") : allLinks;
 
   async function signOut() {
     await qc.cancelQueries();
@@ -31,59 +37,62 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
     <header className="sticky top-0 z-30 border-b border-border bg-background/85 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
         <Logo />
-        <nav className="hidden items-center gap-1 md:flex">
-          {!minimal && <TelegramButton className="mr-2" />}
-          {links.map((l) =>
-            l.hash ? (
-              <a
-                key={l.label}
-                href={l.to}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                {l.label}
-              </a>
-            ) : (
-              <Link
-                key={l.label}
-                to={l.to}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
-              >
-                {l.label}
-              </Link>
-            ),
-          )}
-          {user ? (
-            <>
-              <Link to="/dashboard">
-                <Button size="sm">Dashboard</Button>
-              </Link>
-              <Button size="sm" variant="ghost" onClick={signOut}>
-                Log Out
-              </Button>
-            </>
-          ) : minimal ? null : (
-            <>
-              <Link to="/login">
-                <Button size="sm" variant="ghost">
-                  Login
+        {!bare && (
+          <nav className="hidden items-center gap-1 md:flex">
+            {!minimal && <TelegramButton className="mr-2" />}
+            {links.map((l) =>
+              l.hash ? (
+                <a
+                  key={l.label}
+                  href={l.to}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+                >
+                  {l.label}
+                </a>
+              ) : (
+                <Link
+                  key={l.label}
+                  to={l.to}
+                  className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground"
+                >
+                  {l.label}
+                </Link>
+              ),
+            )}
+            {user ? (
+              <>
+                <Link to="/dashboard">
+                  <Button size="sm">Dashboard</Button>
+                </Link>
+                <Button size="sm" variant="ghost" onClick={signOut}>
+                  Log Out
                 </Button>
-              </Link>
-              <Link to="/signup">
-                <Button size="sm">Sign Up</Button>
-              </Link>
-            </>
-          )}
-
-        </nav>
-        <button
-          className="rounded-lg border border-border p-2 md:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+              </>
+            ) : minimal ? null : (
+              <>
+                <Link to="/login">
+                  <Button size="sm" variant="ghost">
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button size="sm">Sign Up</Button>
+                </Link>
+              </>
+            )}
+          </nav>
+        )}
+        {!bare && (
+          <button
+            className="rounded-lg border border-border p-2 md:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        )}
       </div>
-      {open && (
+      {!bare && open && (
         <div className="border-t border-border bg-card px-4 py-4 md:hidden">
           <div className="flex flex-col gap-2">
             {!minimal && <TelegramButton className="w-full" />}
@@ -129,7 +138,6 @@ export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
                 </Link>
               </>
             )}
-
           </div>
         </div>
       )}
