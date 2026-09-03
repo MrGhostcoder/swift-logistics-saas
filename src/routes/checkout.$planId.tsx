@@ -226,11 +226,17 @@ function Checkout() {
                   <Label htmlFor="txhash">Transaction Hash (TXID)</Label>
                   <Input
                     id="txhash"
+                    required
+                    minLength={20}
                     placeholder="e.g. 9f3a…"
                     value={txHash}
                     onChange={(e) => setTxHash(e.target.value)}
                     className="mt-1.5 font-mono"
                   />
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    We check this hash against the Tron blockchain and activate your plan
+                    automatically once the transfer is confirmed.
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="date">Payment Date</Label>
