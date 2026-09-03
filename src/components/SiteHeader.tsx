@@ -13,12 +13,18 @@ const allLinks = [
   { to: "/track", label: "Track Package" },
 ];
 
-export function SiteHeader({ minimal = false }: { minimal?: boolean }) {
+export function SiteHeader({
+  minimal = false,
+  bare = false,
+}: {
+  minimal?: boolean;
+  bare?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const { user } = useSession();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const links = minimal ? allLinks.filter((l) => l.label === "Track Package") : allLinks;
+  const links = bare ? [] : minimal ? allLinks.filter((l) => l.label === "Track Package") : allLinks;
 
   async function signOut() {
     await qc.cancelQueries();
