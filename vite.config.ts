@@ -9,9 +9,15 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // When the build runs on Netlify (NETLIFY=true is always set there), pin Nitro to the
 // Netlify preset so the SSR server is emitted as a Netlify function.
 const isNetlify = !!process.env["NETLIFY"] || process.env["NITRO_PRESET"] === "netlify";
+// On Vercel (VERCEL=1 is always set there) emit the Build Output API bundle in .vercel/output.
+const isVercel = !!process.env["VERCEL"] || process.env["NITRO_PRESET"] === "vercel";
 
 export default defineConfig({
-  ...(isNetlify ? { nitro: { preset: "netlify" as const } } : {}),
+  ...(isNetlify
+    ? { nitro: { preset: "netlify" as const } }
+    : isVercel
+      ? { nitro: { preset: "vercel" as const } }
+      : {}),
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
