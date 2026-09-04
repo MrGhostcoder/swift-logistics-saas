@@ -27,6 +27,10 @@ import { formatDate, formatDateTime, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
 import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
 import heroVideoWebmAsset from "@/assets/hero-video.webm.asset.json";
+import warehouseImg from "@/assets/home-warehouse.jpg";
+import courierImg from "@/assets/home-courier.jpg";
+import globalImg from "@/assets/home-global.jpg";
+import appImg from "@/assets/home-app.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -339,6 +343,94 @@ function Home() {
       </section>
 
       <section className="py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
+          <div className="relative">
+            <img
+              src={appImg}
+              alt="Customer following a live parcel tracking timeline on a phone"
+              loading="lazy"
+              width={1280}
+              height={960}
+              className="w-full rounded-[2rem] border border-border object-cover shadow-[var(--shadow-elevated)]"
+            />
+            <img
+              src={courierImg}
+              alt="Courier handing a parcel to a customer at the door"
+              loading="lazy"
+              width={1280}
+              height={960}
+              className="absolute -bottom-8 -right-4 hidden w-48 rounded-2xl border-4 border-background object-cover shadow-[var(--shadow-pop)] sm:block lg:w-56"
+            />
+          </div>
+          <div>
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+              Built for trust
+            </span>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              A tracking experience your customers actually enjoy
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted-foreground">
+              Every shipment gets a clean, mobile-first page with live status, route history and an
+              estimated delivery date — plus a direct line to your team if anything looks off.
+            </p>
+            <ul className="mt-7 space-y-3.5">
+              {[
+                "Mobile-first timeline that updates in real time",
+                "Branded, shareable links with no login required",
+                "Automatic email notices on every status change",
+                "Two-way messaging right on the tracking page",
+              ].map((t) => (
+                <li key={t} className="flex items-start gap-3 text-sm">
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-success/15 text-success">
+                    <Check className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="font-medium">{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-border bg-card py-24">
+        <div className="mx-auto grid max-w-6xl items-center gap-12 px-4 lg:grid-cols-2">
+          <div className="order-2 lg:order-1">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
+              Operations
+            </span>
+            <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
+              From the sorting floor to the front door
+            </h2>
+            <p className="mt-4 leading-relaxed text-muted-foreground">
+              Warehouse teams push scans and status changes in seconds. Recipients see them
+              instantly — no phone calls, no spreadsheets, no chasing updates.
+            </p>
+            <div className="mt-8 grid grid-cols-2 gap-4">
+              {[
+                { value: "150+", label: "Destinations covered" },
+                { value: "4M+", label: "Scans processed" },
+              ].map((s) => (
+                <div key={s.label} className="surface p-5">
+                  <p className="text-2xl font-extrabold tracking-tight">{s.value}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{s.label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <img
+            src={warehouseImg}
+            alt="Warehouse team scanning parcels on a conveyor line"
+            loading="lazy"
+            width={1280}
+            height={960}
+            className="order-1 w-full rounded-[2rem] border border-border object-cover shadow-[var(--shadow-elevated)] lg:order-2"
+          />
+        </div>
+      </section>
+
+
+
+      <section className="py-24">
         <div className="mx-auto max-w-6xl px-4">
           <div className="mx-auto max-w-2xl text-center">
             <span className="text-xs font-bold uppercase tracking-[0.18em] text-primary">
@@ -365,14 +457,24 @@ function Home() {
         </div>
       </section>
 
-      <section className="px-4 pb-24">
-        <div className="hero-aurora mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-border bg-card px-6 py-16 text-center shadow-[var(--shadow-elevated)] sm:px-12">
+      <section className="px-4 pb-24 pt-24">
+        <div className="relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-border px-6 py-20 text-center shadow-[var(--shadow-elevated)] sm:px-12">
+          <img
+            src={globalImg}
+            alt="Global freight network at dusk with cargo plane, container ship and delivery vans"
+            loading="lazy"
+            width={1600}
+            height={900}
+            className="absolute inset-0 -z-20 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 -z-10 bg-background/80 backdrop-blur-[2px]" />
           <h2 className="mx-auto max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl">
             Have a tracking code? See where your package is right now.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
             Live status, route history and estimated delivery — in one search.
           </p>
+
           <div className="mt-8 flex justify-center">
             <Link to="/track">
               <Button
