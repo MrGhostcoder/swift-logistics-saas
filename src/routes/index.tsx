@@ -457,14 +457,24 @@ function Home() {
         </div>
       </section>
 
-      <section className="px-4 pb-24">
-        <div className="hero-aurora mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-border bg-card px-6 py-16 text-center shadow-[var(--shadow-elevated)] sm:px-12">
+      <section className="px-4 pb-24 pt-24">
+        <div className="relative isolate mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-border px-6 py-20 text-center shadow-[var(--shadow-elevated)] sm:px-12">
+          <img
+            src={globalImg}
+            alt="Global freight network at dusk with cargo plane, container ship and delivery vans"
+            loading="lazy"
+            width={1600}
+            height={900}
+            className="absolute inset-0 -z-20 h-full w-full object-cover"
+          />
+          <div className="absolute inset-0 -z-10 bg-background/80 backdrop-blur-[2px]" />
           <h2 className="mx-auto max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl">
             Have a tracking code? See where your package is right now.
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
             Live status, route history and estimated delivery — in one search.
           </p>
+
           <div className="mt-8 flex justify-center">
             <Link to="/track">
               <Button
