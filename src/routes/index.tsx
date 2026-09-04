@@ -27,6 +27,10 @@ import { formatDate, formatDateTime, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
 import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
 import heroVideoWebmAsset from "@/assets/hero-video.webm.asset.json";
+import warehouseImg from "@/assets/home-warehouse.jpg";
+import courierImg from "@/assets/home-courier.jpg";
+import globalImg from "@/assets/home-global.jpg";
+import appImg from "@/assets/home-app.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
