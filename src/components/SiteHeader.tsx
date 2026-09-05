@@ -145,14 +145,78 @@ export function SiteHeader({
   );
 }
 
+const footerCols = [
+  {
+    title: "Product",
+    links: [
+      { to: "/#features", label: "Features", hash: true },
+      { to: "/pricing", label: "Pricing" },
+      { to: "/track", label: "Track Package" },
+    ],
+  },
+  {
+    title: "Account",
+    links: [
+      { to: "/login", label: "Login" },
+      { to: "/signup", label: "Sign Up" },
+      { to: "/dashboard", label: "Dashboard" },
+    ],
+  },
+];
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-card">
-      <div className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-10 sm:flex-row sm:items-center sm:justify-between">
-        <Logo />
-        <p className="text-sm text-muted-foreground">
-          © {new Date().getFullYear()} SwiftTrack Logistics. Shipment tracking made simple.
-        </p>
+      <div className="mx-auto max-w-6xl px-4 py-14">
+        <div className="grid gap-10 md:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+          <div>
+            <Logo />
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              Real-time shipment tracking, public tracking links and delivery notifications — all in one place.
+            </p>
+          </div>
+          {footerCols.map((col) => (
+            <div key={col.title}>
+              <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-foreground">{col.title}</h4>
+              <ul className="mt-4 space-y-2.5">
+                {col.links.map((l) => (
+                  <li key={l.label}>
+                    {l.hash ? (
+                      <a
+                        href={l.to}
+                        className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {l.label}
+                      </a>
+                    ) : (
+                      <Link
+                        to={l.to}
+                        className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {l.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-[0.18em] text-foreground">Need help?</h4>
+            <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+              Join our community or message support — we reply fast.
+            </p>
+            <div className="mt-4">
+              <TelegramButton className="w-full sm:w-auto" />
+            </div>
+          </div>
+        </div>
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-border pt-6 sm:flex-row">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} SwiftTrack Logistics. All rights reserved.
+          </p>
+          <p className="text-xs text-muted-foreground">Shipment tracking made simple.</p>
+        </div>
       </div>
     </footer>
   );
