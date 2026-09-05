@@ -7,14 +7,21 @@ import iconAsset from "@/assets/swifttrack-icon.png.asset.json";
 
 export function Logo({ to = "/" as string, compact = false }) {
   return (
-    <Link to={to} className="flex items-center gap-2.5">
-      <img
-        src={iconAsset.url}
-        alt="SwiftTrack logo"
-        className="h-10 w-auto object-contain"
-      />
+    <Link to={to} className="group flex items-center gap-3">
+      <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition-all duration-300 group-hover:shadow-[var(--shadow-pop)] group-hover:-translate-y-0.5">
+        <img
+          src={iconAsset.url}
+          alt="SwiftTrack logo"
+          className="h-7 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
+        />
+      </span>
       {!compact && (
-        <span className="text-lg font-extrabold tracking-tight text-foreground">SwiftTrack</span>
+        <span className="flex flex-col leading-none">
+          <span className="text-lg font-extrabold tracking-tight text-foreground">SwiftTrack</span>
+          <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+            Logistics
+          </span>
+        </span>
       )}
     </Link>
   );
