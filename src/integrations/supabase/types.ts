@@ -454,6 +454,7 @@ export type Database = {
         Returns: undefined
       }
       approve_payment: { Args: { _payment_id: string }; Returns: undefined }
+      generate_tracking_code: { Args: never; Returns: string }
       get_checkout_settings: {
         Args: never
         Returns: {
