@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useSession } from "@/hooks/useAuth";
-import { generateTrackingCode, SHIP_STATUSES, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
+import { SHIP_STATUSES, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/tracking/new")({
@@ -49,7 +50,7 @@ function NewTracking() {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const code = useMemo(() => generateTrackingCode(), []);
+  const [createdCode, setCreatedCode] = useState<string | null>(null);
   const [form, setForm] = useState(initial);
   const [status, setStatus] = useState<ShipStatus>("pending");
   const [saving, setSaving] = useState(false);
@@ -61,23 +62,29 @@ function NewTracking() {
     e.preventDefault();
     if (!user) return;
     setSaving(true);
-    const { error } = await supabase.from("tracking_codes").insert({
-      user_id: user.id,
-      code,
-      ...form,
-      quantity: Number(form.quantity || 1),
-      estimated_delivery: form.estimated_delivery || null,
-      status,
-    });
+    const { data: created, error } = await supabase
+      .from("tracking_codes")
+      .insert({
+        user_id: user.id,
+        code: "", // generated server-side (unique)
+        ...form,
+        quantity: Number(form.quantity || 1),
+        estimated_delivery: form.estimated_delivery || null,
+        status,
+      })
+      .select("code")
+      .single();
     setSaving(false);
     if (error) {
       toast.error(error.message.includes("remaining") ? error.message : "Could not create tracking code.");
       return;
     }
-    toast.success("Tracking code created successfully.");
+    setCreatedCode(created?.code ?? null);
+    toast.success(`Tracking number ${created?.code ?? ""} created.`);
     qc.invalidateQueries();
     navigate({ to: "/dashboard/tracking" });
   }
+
 
   if (remaining <= 0) {
     return (
@@ -99,7 +106,12 @@ function NewTracking() {
         <div>
           <h1 className="text-2xl font-extrabold">New Tracking Code</h1>
           <p className="text-sm text-muted-foreground">
-            Code <span className="font-mono font-semibold">{code}</span> · {remaining} remaining
+            {createdCode ? (
+              <>Code <span className="font-mono font-semibold">{createdCode}</span> · </>
+            ) : (
+              <>A unique tracking number is generated on save · </>
+            )}
+            {remaining} remaining
           </p>
         </div>
         <Button disabled={saving}>{saving ? "Creating…" : "Create Tracking Code"}</Button>

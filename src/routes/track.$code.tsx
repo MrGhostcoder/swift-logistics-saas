@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Copy, Share2, MapPin, Truck, CalendarClock, PackageX, Send } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { StatusBadge, Skeletons } from "@/components/brand";
@@ -69,6 +69,23 @@ function TrackDetail() {
     },
   });
 
+
+  // Live updates: refresh the timeline whenever the shipment or its events change
+  useEffect(() => {
+    if (!data?.tc?.id) return;
+    const id = data.tc.id;
+    const refresh = () => qc.invalidateQueries({ queryKey: ["track", code] });
+    const channel = supabase
+      .channel(`track-${id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "tracking_events", filter: `tracking_code_id=eq.${id}` }, refresh)
+      .on("postgres_changes", { event: "*", schema: "public", table: "tracking_codes", filter: `id=eq.${id}` }, refresh)
+      .subscribe();
+    const poll = setInterval(refresh, 30000);
+    return () => {
+      clearInterval(poll);
+      supabase.removeChannel(channel);
+    };
+  }, [data?.tc?.id, code, qc]);
 
   async function sendMessage(e: React.FormEvent) {
     e.preventDefault();
