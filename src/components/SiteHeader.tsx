@@ -150,7 +150,6 @@ const footerCols = [
     title: "Product",
     links: [
       { to: "/#features", label: "Features", hash: true },
-      { to: "/pricing", label: "Pricing" },
       { to: "/track", label: "Track Package" },
     ],
   },
@@ -159,7 +158,6 @@ const footerCols = [
     links: [
       { to: "/login", label: "Login" },
       { to: "/signup", label: "Sign Up" },
-      { to: "/dashboard", label: "Dashboard" },
     ],
   },
 ];
