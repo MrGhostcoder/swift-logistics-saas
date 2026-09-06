@@ -66,6 +66,7 @@ function NewTracking() {
       .from("tracking_codes")
       .insert({
         user_id: user.id,
+        code: "", // generated server-side (unique)
         ...form,
         quantity: Number(form.quantity || 1),
         estimated_delivery: form.estimated_delivery || null,
@@ -105,7 +106,12 @@ function NewTracking() {
         <div>
           <h1 className="text-2xl font-extrabold">New Tracking Code</h1>
           <p className="text-sm text-muted-foreground">
-            Code <span className="font-mono font-semibold">{code}</span> · {remaining} remaining
+            {createdCode ? (
+              <>Code <span className="font-mono font-semibold">{createdCode}</span> · </>
+            ) : (
+              <>A unique tracking number is generated on save · </>
+            )}
+            {remaining} remaining
           </p>
         </div>
         <Button disabled={saving}>{saving ? "Creating…" : "Create Tracking Code"}</Button>
