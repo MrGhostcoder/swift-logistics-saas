@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { Copy, Share2, MapPin, Truck, CalendarClock, PackageX, Send } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Copy, Share2, MapPin, Truck, CalendarClock, PackageX, Send, Navigation } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { StatusBadge, Skeletons } from "@/components/brand";
 import { Button } from "@/components/ui/button";
