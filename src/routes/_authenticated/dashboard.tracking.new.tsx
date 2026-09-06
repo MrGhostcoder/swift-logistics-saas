@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useSession } from "@/hooks/useAuth";
-import { generateTrackingCode, SHIP_STATUSES, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
+import { SHIP_STATUSES, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/tracking/new")({
