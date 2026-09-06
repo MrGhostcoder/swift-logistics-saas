@@ -62,23 +62,28 @@ function NewTracking() {
     e.preventDefault();
     if (!user) return;
     setSaving(true);
-    const { error } = await supabase.from("tracking_codes").insert({
-      user_id: user.id,
-      code,
-      ...form,
-      quantity: Number(form.quantity || 1),
-      estimated_delivery: form.estimated_delivery || null,
-      status,
-    });
+    const { data: created, error } = await supabase
+      .from("tracking_codes")
+      .insert({
+        user_id: user.id,
+        ...form,
+        quantity: Number(form.quantity || 1),
+        estimated_delivery: form.estimated_delivery || null,
+        status,
+      })
+      .select("code")
+      .single();
     setSaving(false);
     if (error) {
       toast.error(error.message.includes("remaining") ? error.message : "Could not create tracking code.");
       return;
     }
-    toast.success("Tracking code created successfully.");
+    setCreatedCode(created?.code ?? null);
+    toast.success(`Tracking number ${created?.code ?? ""} created.`);
     qc.invalidateQueries();
     navigate({ to: "/dashboard/tracking" });
   }
+
 
   if (remaining <= 0) {
     return (
