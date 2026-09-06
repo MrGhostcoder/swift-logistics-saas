@@ -50,7 +50,7 @@ function NewTracking() {
   const { data: profile } = useProfile();
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const code = useMemo(() => generateTrackingCode(), []);
+  const [createdCode, setCreatedCode] = useState<string | null>(null);
   const [form, setForm] = useState(initial);
   const [status, setStatus] = useState<ShipStatus>("pending");
   const [saving, setSaving] = useState(false);
