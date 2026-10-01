@@ -180,6 +180,7 @@ function TrackDetail() {
               origin={data.tc.origin || data.tc.pickup_address}
               destination={data.tc.destination || data.tc.delivery_address}
               currentLocation={data.tc.current_location}
+              latestEvent={data.events[data.events.length - 1]}
             />
 
             <div className="surface p-6 sm:p-8">
@@ -317,16 +318,25 @@ function RouteMap({
   origin,
   destination,
   currentLocation,
+  latestEvent,
 }: {
   status: ShipStatus;
   origin?: string | null;
   destination?: string | null;
   currentLocation?: string | null;
+  latestEvent?: { title: string; location: string | null; occurred_at: string };
 }) {
   const pathRef = useRef<SVGPathElement>(null);
   const [point, setPoint] = useState<{ x: number; y: number } | null>(null);
   const progress = STATUS_PROGRESS[status] ?? 0.35;
   const moving = status !== "delivered" && status !== "exception";
+  const pct = Math.round(progress * 100);
+  const statusLabel = STATUS_LABEL[status] ?? status;
+  const summary = `Shipment ${statusLabel}. ${pct}% of the route complete, from ${origin || "unknown origin"} to ${destination || "unknown destination"}. Current location: ${currentLocation || "not yet available"}.${
+    latestEvent
+      ? ` Latest update: ${latestEvent.title}${latestEvent.location ? ` at ${latestEvent.location}` : ""} on ${formatDateTime(latestEvent.occurred_at)}.`
+      : ""
+  }`;
 
   useEffect(() => {
     const path = pathRef.current;
@@ -353,7 +363,7 @@ function RouteMap({
         )}
       </div>
       <div className="map-grid relative mx-6 mb-2 mt-4 sm:mx-8">
-        <svg viewBox="0 0 500 160" className="h-44 w-full" role="img" aria-label="Shipment route map">
+        <svg viewBox="0 0 500 160" className="h-44 w-full" aria-hidden="true" focusable="false">
           {/* base route */}
           <path
             d={ROUTE_PATH}
@@ -420,6 +430,56 @@ function RouteMap({
           <p className="mt-0.5 truncate font-semibold">{destination || "—"}</p>
         </div>
       </div>
+      <section
+        aria-labelledby="route-summary-heading"
+        className="space-y-3 border-t border-border bg-muted/40 px-6 py-4 text-sm sm:px-8"
+      >
+        <h3 id="route-summary-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Route summary
+        </h3>
+        <div>
+          <div className="flex justify-between text-xs font-semibold">
+            <span>Route progress</span>
+            <span>{pct}% complete</span>
+          </div>
+          <div
+            role="progressbar"
+            aria-label="Route progress"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={pct}
+            aria-valuetext={`${pct}% complete — ${statusLabel}`}
+            className="mt-1.5 h-2 overflow-hidden rounded-full bg-border"
+          >
+            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+          </div>
+        </div>
+        <dl className="grid gap-2 sm:grid-cols-2">
+          <div>
+            <dt className="text-xs text-muted-foreground">Current location</dt>
+            <dd className="font-semibold">{currentLocation || "Not yet available"}</dd>
+          </div>
+          <div>
+            <dt className="text-xs text-muted-foreground">Latest event</dt>
+            <dd className="font-semibold">
+              {latestEvent ? (
+                <>
+                  {latestEvent.title}
+                  {latestEvent.location ? ` — ${latestEvent.location}` : ""}
+                  <span className="block text-xs font-normal text-muted-foreground">
+                    <time dateTime={latestEvent.occurred_at}>{formatDateTime(latestEvent.occurred_at)}</time>
+                  </span>
+                </>
+              ) : (
+                "No updates yet"
+              )}
+            </dd>
+          </div>
+        </dl>
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {summary}
+        </p>
+      </section>
     </div>
   );
 }
