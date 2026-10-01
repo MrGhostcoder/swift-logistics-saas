@@ -197,7 +197,7 @@ function TrackDetail() {
                         <span
                           className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
                             isLast
-                              ? "bg-primary text-primary-foreground"
+                              ? "animate-pulse-ring bg-primary text-primary-foreground"
                               : "bg-success text-success-foreground"
                           }`}
                         >
