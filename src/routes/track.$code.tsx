@@ -324,7 +324,7 @@ function RouteMap({
   origin?: string | null;
   destination?: string | null;
   currentLocation?: string | null;
-  latestEvent?: { title: string; location: string | null; occurred_at: string };
+  latestEvent?: { title: string; location: string | null; occurred_at: string } | undefined;
 }) {
   const pathRef = useRef<SVGPathElement>(null);
   const [point, setPoint] = useState<{ x: number; y: number } | null>(null);
