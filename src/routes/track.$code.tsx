@@ -188,7 +188,11 @@ function TrackDetail() {
                 {data.events.map((ev, i) => {
                   const isLast = i === data.events.length - 1;
                   return (
-                    <li key={ev.id} className="flex gap-4">
+                    <li
+                      key={ev.id}
+                      className="flex animate-rise gap-4"
+                      style={{ animationDelay: `${i * 120}ms` }}
+                    >
                       <div className="flex flex-col items-center">
                         <span
                           className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
