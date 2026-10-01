@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Mail } from "lucide-react";
 import { Logo, TelegramButton } from "@/components/brand";
 import { Button } from "@/components/ui/button";
 import { useSession } from "@/hooks/useAuth";
@@ -204,6 +204,13 @@ export function SiteFooter() {
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               Join our community or message support — we reply fast.
             </p>
+            <a
+              href="mailto:swifttracking@solobrandin.com"
+              className="mt-3 inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+            >
+              <Mail className="h-4 w-4" />
+              swifttracking@solobrandin.com
+            </a>
             <div className="mt-4">
               <TelegramButton className="w-full sm:w-auto" />
             </div>
