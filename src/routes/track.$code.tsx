@@ -401,7 +401,7 @@ function RouteMap({
           )}
         </svg>
       </div>
-      <div className="flex items-center justify-between border-t border-border px-6 py-4 text-xs sm:px-8">
+      <div className="flex items-center justify-between gap-4 border-t border-border px-6 py-4 text-xs sm:px-8">
         <div className="min-w-0">
           <p className="font-semibold uppercase tracking-wide text-muted-foreground">Origin</p>
           <p className="mt-0.5 truncate font-semibold">{origin || "—"}</p>
