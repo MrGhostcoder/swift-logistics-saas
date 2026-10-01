@@ -175,18 +175,29 @@ function TrackDetail() {
               </div>
             </div>
 
+            <RouteMap
+              status={data.tc.status}
+              origin={data.tc.origin || data.tc.pickup_address}
+              destination={data.tc.destination || data.tc.delivery_address}
+              currentLocation={data.tc.current_location}
+            />
+
             <div className="surface p-6 sm:p-8">
               <h2 className="text-lg font-bold">Tracking Timeline</h2>
               <ol className="mt-6 space-y-0">
                 {data.events.map((ev, i) => {
                   const isLast = i === data.events.length - 1;
                   return (
-                    <li key={ev.id} className="flex gap-4">
+                    <li
+                      key={ev.id}
+                      className="flex animate-rise gap-4"
+                      style={{ animationDelay: `${i * 120}ms` }}
+                    >
                       <div className="flex flex-col items-center">
                         <span
                           className={`flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
                             isLast
-                              ? "bg-primary text-primary-foreground"
+                              ? "animate-pulse-ring bg-primary text-primary-foreground"
                               : "bg-success text-success-foreground"
                           }`}
                         >
@@ -285,6 +296,130 @@ function TrackDetail() {
         )}
       </main>
       <SiteFooter />
+    </div>
+  );
+}
+
+const STATUS_PROGRESS: Record<string, number> = {
+  pending: 0.06,
+  label_created: 0.12,
+  processing: 0.25,
+  in_transit: 0.55,
+  out_for_delivery: 0.85,
+  delivered: 1,
+  exception: 0.5,
+};
+
+const ROUTE_PATH = "M 40 130 C 160 30, 320 180, 460 70";
+
+function RouteMap({
+  status,
+  origin,
+  destination,
+  currentLocation,
+}: {
+  status: ShipStatus;
+  origin?: string | null;
+  destination?: string | null;
+  currentLocation?: string | null;
+}) {
+  const pathRef = useRef<SVGPathElement>(null);
+  const [point, setPoint] = useState<{ x: number; y: number } | null>(null);
+  const progress = STATUS_PROGRESS[status] ?? 0.35;
+  const moving = status !== "delivered" && status !== "exception";
+
+  useEffect(() => {
+    const path = pathRef.current;
+    if (!path) return;
+    const len = path.getTotalLength();
+    const p = path.getPointAtLength(len * progress);
+    setPoint({ x: p.x, y: p.y });
+  }, [progress]);
+
+  return (
+    <div className="surface overflow-hidden">
+      <div className="flex items-center justify-between px-6 pt-6 sm:px-8">
+        <h2 className="flex items-center gap-2 text-lg font-bold">
+          <Navigation className="h-4 w-4 text-primary" /> Live Route
+        </h2>
+        {moving && (
+          <span className="flex items-center gap-2 text-xs font-semibold text-primary">
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60" />
+              <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
+            </span>
+            In progress
+          </span>
+        )}
+      </div>
+      <div className="map-grid relative mx-6 mb-2 mt-4 sm:mx-8">
+        <svg viewBox="0 0 500 160" className="h-44 w-full" role="img" aria-label="Shipment route map">
+          {/* base route */}
+          <path
+            d={ROUTE_PATH}
+            fill="none"
+            stroke="var(--color-border)"
+            strokeWidth="3"
+            strokeLinecap="round"
+          />
+          {/* animated travelled flow */}
+          <path
+            ref={pathRef}
+            d={ROUTE_PATH}
+            fill="none"
+            stroke="var(--color-primary)"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeDasharray="10 18"
+            className="animate-dash-flow"
+            pathLength={100}
+            strokeDashoffset={0}
+            style={{ clipPath: `inset(0 ${100 - progress * 100}% 0 0)` }}
+          />
+          {/* origin pin */}
+          <g transform="translate(40 130)">
+            <circle r="9" fill="var(--color-success)" opacity="0.2" />
+            <circle r="4.5" fill="var(--color-success)" />
+          </g>
+          {/* destination pin */}
+          <g transform="translate(460 70)">
+            <circle r="9" fill="var(--color-muted-foreground)" opacity="0.2" />
+            <circle r="4.5" fill="var(--color-muted-foreground)" />
+          </g>
+          {/* current position marker */}
+          {point && (
+            <g transform={`translate(${point.x} ${point.y})`}>
+              <circle r="12" fill="var(--color-primary)" opacity="0.25" className="animate-marker-ping" style={{ transformOrigin: "center", transformBox: "fill-box" }} />
+              <circle r="6" fill="var(--color-primary)" stroke="var(--color-card)" strokeWidth="2" />
+            </g>
+          )}
+          {/* travelling truck dot */}
+          {moving && (
+            <circle r="3" fill="var(--color-primary)">
+              <animateMotion dur="6s" repeatCount="indefinite" path={ROUTE_PATH} />
+            </circle>
+          )}
+        </svg>
+      </div>
+      <div className="flex items-center justify-between gap-4 border-t border-border px-6 py-4 text-xs sm:px-8">
+        <div className="min-w-0">
+          <p className="font-semibold uppercase tracking-wide text-muted-foreground">Origin</p>
+          <p className="mt-0.5 truncate font-semibold">{origin || "—"}</p>
+        </div>
+        <div className="mx-4 hidden flex-1 items-center gap-2 sm:flex">
+          <span className="h-px flex-1 bg-border" />
+          <Truck className="h-4 w-4 shrink-0 animate-truck-bob text-primary" />
+          <span className="h-px flex-1 bg-border" />
+        </div>
+        <div className="min-w-0 text-center">
+          <p className="font-semibold uppercase tracking-wide text-muted-foreground">Now</p>
+          <p className="mt-0.5 truncate font-semibold text-primary">{currentLocation || "—"}</p>
+        </div>
+        <div className="min-w-0 text-right">
+          <p className="font-semibold uppercase tracking-wide text-muted-foreground">Destination</p>
+          <p className="mt-0.5 truncate font-semibold">{destination || "—"}</p>
+        </div>
+      </div>
     </div>
   );
 }
