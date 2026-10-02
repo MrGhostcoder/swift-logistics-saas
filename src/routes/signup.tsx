@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Logo } from "@/components/brand";
+import { AuthShell, FreeTrackingBadge } from "@/components/AuthShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,18 +58,17 @@ function SignupPage() {
       toast.error(error.message);
       return;
     }
-    toast.success("Account created.");
+    toast.success("Account created — your free tracking code is ready!");
     navigate({ to: "/dashboard" });
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="flex justify-center">
-          <Logo />
-        </div>
-        <div className="surface mt-6 p-7">
+    <AuthShell>
+        <div className="surface p-7">
           <h1 className="text-2xl font-extrabold">Create your account</h1>
+          <div className="mt-4">
+            <FreeTrackingBadge />
+          </div>
           <div className="mt-6">
             <GoogleButton label="Sign up with Google" />
           </div>
@@ -109,7 +108,6 @@ function SignupPage() {
             </Link>
           </p>
         </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 }
