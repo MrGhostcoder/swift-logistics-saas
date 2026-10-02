@@ -5,6 +5,7 @@ import { SupportButton } from "@/components/brand";
 const nav = [
   { to: "/dashboard", label: "Overview" },
   { to: "/dashboard/tracking", label: "Tracking Codes" },
+  { to: "/dashboard/wallet", label: "Wallet" },
   { to: "/dashboard/payments", label: "Payments" },
   { to: "/dashboard/messages", label: "Messages" },
   { to: "/dashboard/notifications", label: "Notifications" },

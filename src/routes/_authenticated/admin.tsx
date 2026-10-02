@@ -8,6 +8,7 @@ import { useIsAdmin } from "@/hooks/useAuth";
 const nav = [
   { to: "/admin", label: "Overview" },
   { to: "/admin/payments", label: "Payments" },
+  { to: "/admin/wallet", label: "Wallet" },
   { to: "/admin/users", label: "Users" },
   { to: "/admin/tracking", label: "Tracking Codes" },
   { to: "/admin/settings", label: "Settings" },

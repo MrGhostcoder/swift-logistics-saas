@@ -8,6 +8,13 @@
       "when": 1790901502945,
       "tag": "0000_free_tracking_on_signup",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790903700715,
+      "tag": "0001_user_wallet",
+      "breakpoints": true
     }
   ]
 }

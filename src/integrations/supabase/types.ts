@@ -429,6 +429,53 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_transactions: {
+        Row: {
+          admin_note: string | null
+          amount: number
+          created_at: string
+          id: string
+          kind: string
+          plan_id: string | null
+          reviewed_at: string | null
+          status: Database["public"]["Enums"]["pay_status"]
+          tx_hash: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string | null
+          amount: number
+          created_at?: string
+          id?: string
+          kind: string
+          plan_id?: string | null
+          reviewed_at?: string | null
+          status?: Database["public"]["Enums"]["pay_status"]
+          tx_hash?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_note?: string | null
+          amount?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          plan_id?: string | null
+          reviewed_at?: string | null
+          status?: Database["public"]["Enums"]["pay_status"]
+          tx_hash?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallet_transactions_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -440,6 +487,10 @@ export type Database = {
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }[]
+      }
+      admin_review_wallet_tx: {
+        Args: { _approve: boolean; _id: string; _note?: string }
+        Returns: undefined
       }
       admin_set_account_status: {
         Args: { _status: string; _user_id: string }
@@ -477,9 +528,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      my_wallet_balance: { Args: never; Returns: number }
       reject_payment: {
         Args: { _note: string; _payment_id: string }
         Returns: undefined
+      }
+      request_wallet_purchase: { Args: { _plan_id: string }; Returns: string }
+      request_wallet_topup: {
+        Args: { _amount: number; _tx_hash: string }
+        Returns: string
       }
       send_public_message: {
         Args: { _body: string; _code: string; _sender_name: string }
@@ -489,6 +546,7 @@ export type Database = {
         Args: { _amount: number; _payment_id: string; _tx_hash: string }
         Returns: undefined
       }
+      wallet_balance: { Args: { _user_id: string }; Returns: number }
     }
     Enums: {
       app_role: "admin" | "customer"
