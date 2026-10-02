@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Logo } from "@/components/brand";
+import { AuthShell, FreeTrackingBadge } from "@/components/AuthShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,12 +41,8 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-md">
-        <div className="flex justify-center">
-          <Logo />
-        </div>
-        <div className="surface mt-6 p-7">
+    <AuthShell>
+        <div className="surface p-7">
           <h1 className="text-2xl font-extrabold">Log in</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Manage your shipments and tracking codes.
@@ -98,8 +94,10 @@ function LoginPage() {
               Sign up
             </Link>
           </p>
+          <div className="mt-5">
+            <FreeTrackingBadge />
+          </div>
         </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 }
