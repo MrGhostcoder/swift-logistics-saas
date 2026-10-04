@@ -212,6 +212,11 @@ function TrackDetail() {
                           {formatDateTime(ev.occurred_at)}
                           {ev.location ? ` · ${ev.location}` : ""}
                         </p>
+                        {(ev as { note?: string | null }).note ? (
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {(ev as { note?: string | null }).note}
+                          </p>
+                        ) : null}
                       </div>
                     </li>
                   );

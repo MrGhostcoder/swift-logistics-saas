@@ -15,6 +15,13 @@
       "when": 1790903700715,
       "tag": "0001_user_wallet",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791139125118,
+      "tag": "0002_public_tracking_include_note",
+      "breakpoints": true
     }
   ]
 }
