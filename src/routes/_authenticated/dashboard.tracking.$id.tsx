@@ -25,6 +25,7 @@ import {
   type ShipStatus,
 } from "@/lib/swift";
 import { toast } from "sonner";
+import { AiUpdateWriter } from "@/components/AiUpdateWriter";
 
 export const Route = createFileRoute("/_authenticated/dashboard/tracking/$id")({
   component: TrackingDetail,
@@ -212,6 +213,8 @@ function TrackingDetail() {
           Each status change creates a tracking event and notifies the customer.
         </p>
       </div>
+
+      <AiUpdateWriter trackingId={data.tc.id} currentStatus={data.tc.status as ShipStatus} />
 
       <div className="surface p-6">
         <h2 className="text-base font-bold">Tracking Events</h2>
