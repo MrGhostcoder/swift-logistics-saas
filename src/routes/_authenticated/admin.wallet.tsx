@@ -41,7 +41,7 @@ function AdminWallet() {
       const { error } = await supabase.rpc("admin_review_wallet_tx", {
         _id: id,
         _approve: approve,
-        _note: approve ? undefined : "Rejected by admin",
+        _note: approve ? "" : "Rejected by admin",
       });
       if (error) throw error;
     },
