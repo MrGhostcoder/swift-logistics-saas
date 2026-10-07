@@ -1,5 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import icon3dPackage from "@/assets/icon3d-package.png";
+import icon3dTruck from "@/assets/icon3d-truck.png";
+import icon3dLink from "@/assets/icon3d-link.png";
+import icon3dChat from "@/assets/icon3d-chat.png";
+import icon3dDelivered from "@/assets/icon3d-delivered.png";
+import icon3dShield from "@/assets/icon3d-shield.png";
 import {
   Package,
   RefreshCw,
@@ -54,30 +60,30 @@ export const Route = createFileRoute("/")({
 });
 
 const features = [
-  { icon: Package, title: "Package Tracking", body: "Follow every shipment from pickup to doorstep with a precise, timestamped trail." },
-  { icon: RefreshCw, title: "Real-Time Updates", body: "Status changes propagate instantly, so nobody has to ask “where is it?”" },
-  { icon: Link2, title: "Public Tracking Links", body: "Share a branded, read-only link with customers — no login required." },
+  { icon: Package, img: icon3dPackage, title: "Package Tracking", body: "Follow every shipment from pickup to doorstep with a precise, timestamped trail." },
+  { icon: RefreshCw, img: icon3dTruck, title: "Real-Time Updates", body: "Status changes propagate instantly, so nobody has to ask “where is it?”" },
+  { icon: Link2, img: icon3dLink, title: "Public Tracking Links", body: "Share a branded, read-only link with customers — no login required." },
   {
     icon: MessagesSquare,
-    title: "Customer Messaging",
+    img: icon3dChat, title: "Customer Messaging",
     body: "Recipients can reply on the tracking page and reach you directly.",
   },
   {
     icon: Mail,
-    title: "Email Notifications",
+    img: icon3dDelivered, title: "Email Notifications",
     body: "Automatic delivery notices the moment a shipment changes status.",
   },
   {
     icon: ShieldCheck,
-    title: "Secure Dashboard",
+    img: icon3dShield, title: "Secure Dashboard",
     body: "Role-protected workspace with strict data isolation per account.",
   },
 ];
 
 const steps = [
-  { icon: Sparkles, title: "Create a shipment", body: "Add package details and a tracking code is generated instantly." },
-  { icon: Truck, title: "Update the journey", body: "Push status changes and location events as the package moves." },
-  { icon: Globe2, title: "Share the link", body: "Your customer follows the live timeline from any device." },
+  { icon: Sparkles, img: icon3dPackage, title: "Create a shipment", body: "Add package details and a tracking code is generated instantly." },
+  { icon: Truck, img: icon3dTruck, title: "Update the journey", body: "Push status changes and location events as the package moves." },
+  { icon: Globe2, img: icon3dLink, title: "Share the link", body: "Your customer follows the live timeline from any device." },
 ];
 
 const stats = [
@@ -331,9 +337,14 @@ function Home() {
                 key={f.title}
                 className="surface group p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-pop)]"
               >
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                  <f.icon className="h-5 w-5" />
-                </span>
+                <img
+                  src={f.img}
+                  alt=""
+                  loading="lazy"
+                  width={816}
+                  height={816}
+                  className="h-20 w-20 object-contain drop-shadow-xl transition-transform duration-300 group-hover:-translate-y-1 group-hover:rotate-[-6deg] group-hover:scale-110"
+                />
                 <h3 className="mt-5 text-base font-bold">{f.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
               </div>
@@ -446,9 +457,14 @@ function Home() {
                 <span className="absolute right-6 top-5 text-5xl font-extrabold text-muted/80">
                   {i + 1}
                 </span>
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                  <s.icon className="h-5 w-5" />
-                </span>
+                <img
+                  src={s.img}
+                  alt=""
+                  loading="lazy"
+                  width={816}
+                  height={816}
+                  className="h-20 w-20 object-contain drop-shadow-xl"
+                />
                 <h3 className="mt-5 text-base font-bold">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{s.body}</p>
               </div>
