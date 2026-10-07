@@ -24,7 +24,7 @@ export function AiUpdateWriter({ trackingId, currentStatus }: { trackingId: stri
   const [posting, setPosting] = useState(false);
 
   async function write() {
-    if (notes.trim().length < 3) return toast.error("Add a few rough details first.");
+    if (notes.trim().length < 3) { toast.error("Add a few rough details first."); return; }
     setWriting(true);
     try {
       const r = await draft({ data: { trackingId, notes, status, location } });
@@ -47,7 +47,7 @@ export function AiUpdateWriter({ trackingId, currentStatus }: { trackingId: stri
       location: location.trim().slice(0, 200),
     });
     setPosting(false);
-    if (error) return toast.error("Could not post the update.");
+    if (error) { toast.error("Could not post the update."); return; }
     toast.success("Update posted to the customer's timeline.");
     setNotes("");
     setTitle("");
