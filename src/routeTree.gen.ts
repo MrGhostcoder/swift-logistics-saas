@@ -23,6 +23,7 @@ import { Route as TrackCodeRouteImport } from './routes/track.$code'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as AuthenticatedAdminPaymentsRouteImport } from './routes/_authenticated/admin.payments'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
+import { Route as AuthenticatedAdminShipmentsRouteImport } from './routes/_authenticated/admin.shipments'
 import { Route as AuthenticatedAdminTrackingRouteImport } from './routes/_authenticated/admin.tracking'
 import { Route as AuthenticatedAdminUsersRouteImport } from './routes/_authenticated/admin.users'
 import { Route as AuthenticatedAdminWalletRouteImport } from './routes/_authenticated/admin.wallet'
@@ -105,6 +106,12 @@ const AuthenticatedAdminSettingsRoute =
   AuthenticatedAdminSettingsRouteImport.update({
     id: '/settings',
     path: '/settings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminShipmentsRoute =
+  AuthenticatedAdminShipmentsRouteImport.update({
+    id: '/shipments',
+    path: '/shipments',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminTrackingRoute =
@@ -192,6 +199,7 @@ export interface FileRoutesByFullPath {
   '/track/': typeof TrackIndexRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/shipments': typeof AuthenticatedAdminShipmentsRoute
   '/admin/tracking': typeof AuthenticatedAdminTrackingRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/wallet': typeof AuthenticatedAdminWalletRoute
@@ -217,6 +225,7 @@ export interface FileRoutesByTo {
   '/track': typeof TrackIndexRoute
   '/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/shipments': typeof AuthenticatedAdminShipmentsRoute
   '/admin/tracking': typeof AuthenticatedAdminTrackingRoute
   '/admin/users': typeof AuthenticatedAdminUsersRoute
   '/admin/wallet': typeof AuthenticatedAdminWalletRoute
@@ -246,6 +255,7 @@ export interface FileRoutesById {
   '/track/': typeof TrackIndexRoute
   '/_authenticated/admin/payments': typeof AuthenticatedAdminPaymentsRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/shipments': typeof AuthenticatedAdminShipmentsRoute
   '/_authenticated/admin/tracking': typeof AuthenticatedAdminTrackingRoute
   '/_authenticated/admin/users': typeof AuthenticatedAdminUsersRoute
   '/_authenticated/admin/wallet': typeof AuthenticatedAdminWalletRoute
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/track/'
     | '/admin/payments'
     | '/admin/settings'
+    | '/admin/shipments'
     | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
@@ -300,6 +311,7 @@ export interface FileRouteTypes {
     | '/track'
     | '/admin/payments'
     | '/admin/settings'
+    | '/admin/shipments'
     | '/admin/tracking'
     | '/admin/users'
     | '/admin/wallet'
@@ -328,6 +340,7 @@ export interface FileRouteTypes {
     | '/track/'
     | '/_authenticated/admin/payments'
     | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/shipments'
     | '/_authenticated/admin/tracking'
     | '/_authenticated/admin/users'
     | '/_authenticated/admin/wallet'
@@ -455,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminSettingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/shipments': {
+      id: '/_authenticated/admin/shipments'
+      path: '/shipments'
+      fullPath: '/admin/shipments'
+      preLoaderRoute: typeof AuthenticatedAdminShipmentsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/tracking': {
       id: '/_authenticated/admin/tracking'
       path: '/tracking'
@@ -545,6 +565,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminPaymentsRoute: typeof AuthenticatedAdminPaymentsRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminShipmentsRoute: typeof AuthenticatedAdminShipmentsRoute
   AuthenticatedAdminTrackingRoute: typeof AuthenticatedAdminTrackingRoute
   AuthenticatedAdminUsersRoute: typeof AuthenticatedAdminUsersRoute
   AuthenticatedAdminWalletRoute: typeof AuthenticatedAdminWalletRoute
@@ -554,6 +575,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminPaymentsRoute: AuthenticatedAdminPaymentsRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminShipmentsRoute: AuthenticatedAdminShipmentsRoute,
   AuthenticatedAdminTrackingRoute: AuthenticatedAdminTrackingRoute,
   AuthenticatedAdminUsersRoute: AuthenticatedAdminUsersRoute,
   AuthenticatedAdminWalletRoute: AuthenticatedAdminWalletRoute,
