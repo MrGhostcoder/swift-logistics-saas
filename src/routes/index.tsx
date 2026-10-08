@@ -31,8 +31,8 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatDateTime, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
-import heroVideoAsset from "@/assets/hero-video.mp4.asset.json";
-import heroVideoWebmAsset from "@/assets/hero-video.webm.asset.json";
+import heroVideoMp4 from "@/assets/hero-video.mp4";
+import heroVideoWebm from "@/assets/hero-video.webm";
 import warehouseImg from "@/assets/home-warehouse.jpg";
 import courierImg from "@/assets/home-courier.jpg";
 import globalImg from "@/assets/home-global.jpg";
@@ -154,8 +154,8 @@ function Home() {
           playsInline
           aria-hidden="true"
         >
-          <source src={heroVideoWebmAsset.url} type="video/webm" />
-          <source src={heroVideoAsset.url} type="video/mp4" />
+          <source src={heroVideoWebm} type="video/webm" />
+          <source src={heroVideoMp4} type="video/mp4" />
         </video>
         <div className="pointer-events-none absolute inset-0 -z-10 bg-background/45" />
 
