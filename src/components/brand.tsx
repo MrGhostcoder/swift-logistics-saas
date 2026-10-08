@@ -3,7 +3,7 @@ import { Send, MessageCircle } from "lucide-react";
 import { useSettings } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { statusClasses, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
-import iconAsset from "@/assets/swifttrack-icon.png.asset.json";
+import iconUrl from "@/assets/swifttrack-icon.png";
 
 export function Logo({ to = "/" as string, compact = false }) {
   return (
