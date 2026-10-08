@@ -10,7 +10,7 @@ export function Logo({ to = "/" as string, compact = false }) {
     <Link to={to} className="group flex items-center gap-3">
       <span className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-2xl border border-border bg-card shadow-[var(--shadow-card)] transition-all duration-300 group-hover:shadow-[var(--shadow-pop)] group-hover:-translate-y-0.5">
         <img
-          src={iconAsset.url}
+          src={iconUrl}
           alt="SwiftTrack logo"
           className="h-7 w-auto object-contain transition-transform duration-300 group-hover:scale-110"
         />

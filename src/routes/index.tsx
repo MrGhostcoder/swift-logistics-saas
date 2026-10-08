@@ -154,8 +154,8 @@ function Home() {
           playsInline
           aria-hidden="true"
         >
-          <source src={heroVideoWebmAsset.url} type="video/webm" />
-          <source src={heroVideoAsset.url} type="video/mp4" />
+          <source src={heroVideoWebm} type="video/webm" />
+          <source src={heroVideoMp4} type="video/mp4" />
         </video>
         <div className="pointer-events-none absolute inset-0 -z-10 bg-background/45" />
 
