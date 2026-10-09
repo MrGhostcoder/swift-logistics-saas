@@ -546,6 +546,10 @@ export type Database = {
         Args: { _amount: number; _payment_id: string; _tx_hash: string }
         Returns: undefined
       }
+      settle_wallet_topup_onchain: {
+        Args: { _amount: number; _id: string }
+        Returns: undefined
+      }
       wallet_balance: { Args: { _user_id: string }; Returns: number }
     }
     Enums: {
