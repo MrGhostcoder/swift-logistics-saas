@@ -10,6 +10,7 @@ import { EmptyState, Skeletons } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
 import { useCheckoutSettings, useSession } from "@/hooks/useAuth";
 import { formatDate, formatUsdt } from "@/lib/swift";
+import { verifyWalletTopup } from "@/lib/payments.functions";
 
 export const Route = createFileRoute("/_authenticated/dashboard/wallet")({
   component: WalletPage,
@@ -70,14 +71,21 @@ function WalletPage() {
 
   const topup = useMutation({
     mutationFn: async () => {
-      const { error } = await supabase.rpc("request_wallet_topup", {
+      const { data: id, error } = await supabase.rpc("request_wallet_topup", {
         _amount: Number(amount),
         _tx_hash: txid.trim(),
       });
       if (error) throw error;
+      try {
+        return await verifyWalletTopup({ data: { id: id as string } });
+      } catch {
+        return { status: "pending" as const, amount: 0 };
+      }
     },
-    onSuccess: () => {
-      toast.success("Top-up submitted. It will be added once an admin approves it.");
+    onSuccess: (r) => {
+      if (r?.status === "approved") toast.success(`Confirmed on-chain — ${r.amount} USDT added to your wallet.`);
+      else toast.success("Top-up submitted. It will be added once confirmed on-chain or approved by an admin.");
+      qc.invalidateQueries({ queryKey: ["wallet-balance"] });
       setAmount("");
       setTxid("");
       qc.invalidateQueries({ queryKey: ["wallet-history"] });

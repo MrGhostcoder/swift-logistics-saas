@@ -104,3 +104,36 @@ export const verifyUsdtPayment = createServerFn({ method: "POST" })
       message: `Received ${transfer.amount} USDT — your plan is active.`,
     };
   });
+
+export const verifyWalletTopup = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data) => z.object({ id: z.string().uuid() }).parse(data))
+  .handler(async ({ data, context }) => {
+    const { supabase, userId } = context;
+    const { data: tx } = await supabase
+      .from("wallet_transactions")
+      .select("id, user_id, kind, amount, tx_hash, status")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (!tx || tx.user_id !== userId || tx.kind !== "topup") throw new Error("Top-up not found.");
+    if (tx.status === "approved") return { status: "approved" as const, amount: Number(tx.amount) };
+    if (tx.status !== "pending" || !tx.tx_hash) return { status: "pending" as const, amount: 0 };
+
+    const { data: settings } = await supabase.rpc("get_checkout_settings");
+    const wallet = (settings ?? []).find(
+      (s: { key: string; value: string }) => s.key === "usdt_address",
+    )?.value;
+    if (!wallet) return { status: "pending" as const, amount: 0 };
+
+    const transfer = await findTronTransfer(wallet, tx.tx_hash).catch(() => null);
+    if (!transfer || transfer.to.toLowerCase() !== wallet.toLowerCase() || transfer.amount <= 0) {
+      return { status: "pending" as const, amount: 0 };
+    }
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin.rpc("settle_wallet_topup_onchain", {
+      _id: tx.id,
+      _amount: transfer.amount,
+    });
+    if (error) throw new Error("Verified on-chain but could not credit the wallet.");
+    return { status: "approved" as const, amount: transfer.amount };
+  });
