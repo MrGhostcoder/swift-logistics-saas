@@ -209,7 +209,7 @@ function WalletOverview() {
     },
   });
   const { data: wallet } = useQuery({
-    queryKey: ["wallet-history", user?.id],
+    queryKey: ["wallet-overview", user?.id],
     enabled: !!user,
     queryFn: async () => {
       const { data, error } = await supabase
