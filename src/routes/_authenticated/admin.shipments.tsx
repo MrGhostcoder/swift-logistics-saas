@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { MapPin, Search, Package } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 import { EmptyState, Skeletons, StatusBadge } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatDateTime, SHIP_STATUSES, STATUS_LABEL } from "@/lib/swift";
@@ -240,6 +242,7 @@ function ShipmentPanel({ s }: { s: Shipment }) {
         <Info k="Est. delivery" v={formatDate(s.estimated_delivery)} />
         <Info k="Last update" v={formatDate(s.updated_at)} />
       </dl>
+      <UpdateShipment s={s} />
       <h3 className="mt-5 text-sm font-bold">Timeline</h3>
       <ol className="mt-3 max-h-80 space-y-3 overflow-y-auto">
         {(events ?? []).map((e, i) => (
@@ -268,6 +271,88 @@ function Info({ k, v }: { k: string; v: string | null }) {
     <div>
       <dt className="text-xs text-muted-foreground">{k}</dt>
       <dd className="truncate font-medium">{v || "—"}</dd>
+    </div>
+  );
+}
+
+function UpdateShipment({ s }: { s: Shipment }) {
+  const qc = useQueryClient();
+  const [status, setStatus] = useState(s.status);
+  const [location, setLocation] = useState(s.current_location ?? "");
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    setStatus(s.status);
+    setLocation(s.current_location ?? "");
+    setNote("");
+  }, [s.id, s.status, s.current_location]);
+
+  async function save() {
+    const statusChanged = status !== s.status;
+    const locChanged = location.trim() !== (s.current_location ?? "");
+    if (!statusChanged && !locChanged && !note.trim()) {
+      toast.info("Nothing to update.");
+      return;
+    }
+    setBusy(true);
+    try {
+      const { error } = await supabase
+        .from("tracking_codes")
+        .update({ status: status as Shipment["status"] as never, current_location: location.trim() })
+        .eq("id", s.id);
+      if (error) throw error;
+      // Status changes add a timeline entry automatically; add one for location-only or extra notes.
+      if (!statusChanged || note.trim()) {
+        const { error: e2 } = await supabase.from("tracking_events").insert({
+          tracking_code_id: s.id,
+          status: status as never,
+          title: statusChanged ? "Update" : locChanged ? "Location updated" : "Update",
+          location: location.trim(),
+          note: note.trim(),
+        });
+        if (e2) throw e2;
+      }
+      toast.success("Shipment updated — the tracking page refreshes live.");
+      setNote("");
+      qc.invalidateQueries({ queryKey: ["admin-shipments"] });
+      qc.invalidateQueries({ queryKey: ["admin-shipment-events", s.id] });
+    } catch (e) {
+      toast.error((e as Error).message || "Could not update shipment.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="mt-5 rounded-2xl border border-border bg-muted/30 p-4">
+      <h3 className="text-sm font-bold">Update shipment</h3>
+      <div className="mt-3 space-y-2">
+        <label className="block text-xs text-muted-foreground">
+          Status
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="mt-1 h-9 w-full rounded-md border border-input bg-background px-2 text-sm text-foreground"
+          >
+            {SHIP_STATUSES.map((st) => (
+              <option key={st} value={st}>
+                {STATUS_LABEL[st] ?? st}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="block text-xs text-muted-foreground">
+          Current location
+          <Input value={location} onChange={(e) => setLocation(e.target.value)} placeholder="e.g. Lagos Hub" className="mt-1" />
+        </label>
+        <label className="block text-xs text-muted-foreground">
+          Note for customer (optional)
+          <Input value={note} onChange={(e) => setNote(e.target.value)} placeholder="e.g. Cleared customs" className="mt-1" />
+        </label>
+        <Button className="w-full" onClick={save} disabled={busy}>
+          {busy ? "Saving…" : "Save & publish"}
+        </Button>
+      </div>
     </div>
   );
 }

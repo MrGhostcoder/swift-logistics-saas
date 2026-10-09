@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState, Skeletons, StatusBadge } from "@/components/brand";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useSession } from "@/hooks/useAuth";
-import { formatDate, trackingUrl, SUBSCRIPTION_LABEL } from "@/lib/swift";
+import { formatDate, formatUsdt, trackingUrl, SUBSCRIPTION_LABEL } from "@/lib/swift";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -83,6 +83,8 @@ function DashboardHome() {
           tone="text-telegram"
         />
       </div>
+
+      <WalletOverview />
 
       <div>
         <h2 className="mb-3 text-lg font-bold">Your Tracking Codes</h2>
@@ -191,6 +193,99 @@ function Stat({
         <Icon className={`h-5 w-5 ${tone}`} />
       </div>
       <p className="mt-3 text-3xl font-extrabold">{value}</p>
+    </div>
+  );
+}
+
+function WalletOverview() {
+  const { user } = useSession();
+  const { data: balance } = useQuery({
+    queryKey: ["wallet-balance", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("my_wallet_balance");
+      if (error) throw error;
+      return Number(data ?? 0);
+    },
+  });
+  const { data: wallet } = useQuery({
+    queryKey: ["wallet-overview", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("wallet_transactions")
+        .select("id, kind, amount, status, created_at, plans(name, code_limit)")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+  const { data: payments } = useQuery({
+    queryKey: ["my-approved-payments", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("payments")
+        .select("id, amount, created_at, plans(name, code_limit)")
+        .eq("user_id", user!.id)
+        .eq("status", "approved")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const pending = (wallet ?? []).filter((t) => t.kind === "topup" && t.status === "pending");
+  type P = { name: string; code_limit: number } | null;
+  const plans = [
+    ...(wallet ?? [])
+      .filter((t) => t.kind === "purchase" && t.status === "approved")
+      .map((t) => ({ id: t.id, plan: t.plans as P, amount: t.amount, at: t.created_at, via: "Wallet" })),
+    ...(payments ?? []).map((p) => ({ id: p.id, plan: p.plans as P, amount: p.amount, at: p.created_at, via: "USDT" })),
+  ].sort((a, b) => b.at.localeCompare(a.at));
+
+  return (
+    <div className="grid gap-4 lg:grid-cols-3">
+      <div className="surface p-5">
+        <p className="text-sm font-medium text-muted-foreground">Wallet balance</p>
+        <p className="mt-3 text-3xl font-extrabold">{formatUsdt(balance ?? 0)}</p>
+        <Link to="/dashboard/wallet">
+          <Button size="sm" variant="outline" className="mt-4">Top up wallet</Button>
+        </Link>
+      </div>
+      <div className="surface p-5">
+        <p className="text-sm font-medium text-muted-foreground">Pending top-ups</p>
+        {pending.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">No pending top-ups.</p>
+        ) : (
+          <ul className="mt-3 space-y-2 text-sm">
+            {pending.map((t) => (
+              <li key={t.id} className="flex justify-between">
+                <span className="font-semibold">{formatUsdt(t.amount)}</span>
+                <span className="text-muted-foreground">{formatDate(t.created_at)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+      <div className="surface p-5">
+        <p className="text-sm font-medium text-muted-foreground">Approved plans</p>
+        {plans.length === 0 ? (
+          <p className="mt-3 text-sm text-muted-foreground">No approved plans yet.</p>
+        ) : (
+          <ul className="mt-3 space-y-2 text-sm">
+            {plans.map((p) => (
+              <li key={p.id} className="flex justify-between gap-2">
+                <span className="font-semibold">
+                  {p.plan?.name ?? "Plan"} <span className="font-normal text-muted-foreground">· {p.plan?.code_limit ?? 0} codes · {p.via}</span>
+                </span>
+                <span className="text-muted-foreground">{formatDate(p.at)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
