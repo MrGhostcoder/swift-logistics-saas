@@ -16,6 +16,8 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile, useSession } from "@/hooks/useAuth";
 import { SHIP_STATUSES, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
+import { DEFAULT_CARRIER, type CarrierId } from "@/lib/carriers";
+import { CarrierPicker } from "@/components/CarrierLogo";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/_authenticated/dashboard/tracking/new")({
@@ -53,6 +55,7 @@ function NewTracking() {
   const [createdCode, setCreatedCode] = useState<string | null>(null);
   const [form, setForm] = useState(initial);
   const [status, setStatus] = useState<ShipStatus>("pending");
+  const [carrier, setCarrier] = useState<CarrierId>(DEFAULT_CARRIER);
   const [saving, setSaving] = useState(false);
 
   const remaining = (profile?.codes_total ?? 0) - (profile?.codes_used ?? 0);
@@ -71,6 +74,7 @@ function NewTracking() {
         quantity: Number(form.quantity || 1),
         estimated_delivery: form.estimated_delivery || null,
         status,
+        carrier,
       })
       .select("code")
       .single();
@@ -149,6 +153,15 @@ function NewTracking() {
             value={form.package_description}
             onChange={(e) => set("package_description", e.target.value)}
           />
+        </div>
+      </Section>
+
+      <Section title="Shipping Carrier">
+        <div className="sm:col-span-2">
+          <p className="mb-3 text-sm text-muted-foreground">
+            Choose who is delivering this package. The carrier's logo shows on the tracking page.
+          </p>
+          <CarrierPicker value={carrier} onChange={setCarrier} />
         </div>
       </Section>
 

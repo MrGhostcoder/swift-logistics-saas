@@ -93,6 +93,20 @@
   --sidebar-accent-foreground: oklch(0.42 0.13 45);
   --sidebar-border: oklch(0.918 0.004 90);
   --sidebar-ring: oklch(0.685 0.185 45);
+
+  /* Carrier brand colors (fixed across themes) */
+  --carrier-dhl-bg: #ffcc00;
+  --carrier-dhl-fg: #d40511;
+  --carrier-fedex-bg: #ffffff;
+  --carrier-fedex-fg: #4d148c;
+  --carrier-ups-bg: #351c15;
+  --carrier-ups-fg: #ffb500;
+  --carrier-usps-bg: #333366;
+  --carrier-usps-fg: #ffffff;
+  --carrier-dpd-bg: #dc0032;
+  --carrier-dpd-fg: #ffffff;
+  --carrier-tnt-bg: #ff6600;
+  --carrier-tnt-fg: #ffffff;
 }
 
 .dark {

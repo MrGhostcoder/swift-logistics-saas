@@ -29,6 +29,13 @@
       "when": 1791574214434,
       "tag": "0003_wallet_topup_onchain",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1793642243920,
+      "tag": "0004_tracking_carrier",
+      "breakpoints": true
     }
   ]
 }

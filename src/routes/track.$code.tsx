@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Copy, Share2, MapPin, Truck, CalendarClock, PackageX, Send, Navigation } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { StatusBadge, Skeletons } from "@/components/brand";
+import { CarrierBadge } from "@/components/CarrierLogo";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -44,6 +45,7 @@ type PublicTracking = {
     pickup_address: string | null;
     delivery_address: string | null;
     shipping_method: string | null;
+    carrier?: string | null;
     estimated_delivery: string | null;
     current_location: string | null;
   };
@@ -251,6 +253,7 @@ function TrackDetail() {
                 <Detail label="Recipient" value={data.tc.recipient_name} />
                 <Detail label="Origin" value={data.tc.origin || data.tc.pickup_address} />
                 <Detail label="Destination" value={data.tc.destination || data.tc.delivery_address} />
+                <Detail label="Carrier" value={<CarrierBadge carrier={data.tc.carrier} />} />
                 <Detail label="Shipping Method" value={data.tc.shipping_method} />
                 <Detail label="Estimated Delivery" value={formatDate(data.tc.estimated_delivery)} />
                 <Detail
