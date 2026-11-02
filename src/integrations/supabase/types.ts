@@ -288,6 +288,7 @@ export type Database = {
       }
       tracking_codes: {
         Row: {
+          carrier: string
           code: string
           created_at: string
           current_location: string | null
@@ -316,6 +317,7 @@ export type Database = {
           weight: string | null
         }
         Insert: {
+          carrier?: string
           code: string
           created_at?: string
           current_location?: string | null
@@ -344,6 +346,7 @@ export type Database = {
           weight?: string | null
         }
         Update: {
+          carrier?: string
           code?: string
           created_at?: string
           current_location?: string | null
