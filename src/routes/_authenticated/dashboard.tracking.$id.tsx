@@ -176,6 +176,7 @@ function TrackingDetail() {
           <D label="Destination" v={data.tc.destination || data.tc.delivery_address} />
           <D label="Estimated Delivery" v={formatDate(data.tc.estimated_delivery)} />
           <D label="Weight" v={data.tc.weight} />
+          <D label="Carrier" v={<CarrierBadge carrier={data.tc.carrier} />} />
           <D label="Shipping Method" v={data.tc.shipping_method} />
           <D label="Current Location" v={data.tc.current_location} />
         </dl>
