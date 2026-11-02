@@ -15,7 +15,7 @@ export function CarrierLogo({
   size = "md",
   className,
 }: {
-  carrier?: string | null;
+  carrier?: string | null | undefined;
   size?: keyof typeof SIZES;
   className?: string;
 }) {
