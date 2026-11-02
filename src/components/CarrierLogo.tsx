@@ -33,8 +33,8 @@ export function CarrierLogo({
           className={s.logo}
           style={{
             backgroundColor: `var(--carrier-${c.id}-fg)`,
-            WebkitMask: `url(${c.logo}) center / contain no-repeat`,
-            mask: `url(${c.logo}) center / contain no-repeat`,
+            WebkitMask: `url("${c.logo}") center / contain no-repeat`,
+            mask: `url("${c.logo}") center / contain no-repeat`,
           }}
         />
       </span>
