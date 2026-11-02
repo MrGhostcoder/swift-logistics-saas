@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Copy, Share2, MapPin, Truck, CalendarClock, PackageX, Send, Navigation } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { StatusBadge, Skeletons } from "@/components/brand";
+import { CarrierBadge } from "@/components/CarrierLogo";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";

@@ -26,6 +26,7 @@ import {
 } from "@/lib/swift";
 import { toast } from "sonner";
 import { AiUpdateWriter } from "@/components/AiUpdateWriter";
+import { CarrierBadge } from "@/components/CarrierLogo";
 
 export const Route = createFileRoute("/_authenticated/dashboard/tracking/$id")({
   component: TrackingDetail,
@@ -316,7 +317,7 @@ function TrackingDetail() {
   );
 }
 
-function D({ label, v }: { label: string; v?: string | null }) {
+function D({ label, v }: { label: string; v?: React.ReactNode }) {
   return (
     <div className="rounded-xl border border-border bg-muted/40 p-3">
       <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
