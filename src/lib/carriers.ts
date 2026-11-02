@@ -28,6 +28,6 @@ export const CARRIERS: Carrier[] = [
 
 export const DEFAULT_CARRIER: CarrierId = "swifttrack";
 
-export function getCarrier(id?: string | null): Carrier {
+export function getCarrier(id?: string | null | undefined): Carrier {
   return CARRIERS.find((c) => c.id === id) ?? (CARRIERS[0] as Carrier);
 }

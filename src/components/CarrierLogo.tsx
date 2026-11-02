@@ -63,7 +63,7 @@ export function CarrierLogo({
 }
 
 /** Logo + name, for read-only detail views. */
-export function CarrierBadge({ carrier }: { carrier?: string | null }) {
+export function CarrierBadge({ carrier }: { carrier?: string | null | undefined }) {
   const c = getCarrier(carrier);
   return (
     <span className="inline-flex items-center gap-2">
