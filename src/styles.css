@@ -107,6 +107,36 @@
   --carrier-dpd-fg: #ffffff;
   --carrier-tnt-bg: #ff6600;
   --carrier-tnt-fg: #ffffff;
+  --carrier-amazon-bg: #232f3e;
+  --carrier-amazon-fg: #ff9900;
+  --carrier-deutschepost-bg: #ffcc00;
+  --carrier-deutschepost-fg: #1a1a1a;
+  --carrier-hermes-bg: #ffffff;
+  --carrier-hermes-fg: #0091cd;
+  --carrier-toll-bg: #007a68;
+  --carrier-toll-fg: #ffffff;
+  --carrier-royalmail-bg: #e2001a;
+  --carrier-royalmail-fg: #ffd200;
+  --carrier-evri-bg: #007bc4;
+  --carrier-evri-fg: #ffffff;
+  --carrier-canadapost-bg: #d52b1e;
+  --carrier-canadapost-fg: #ffffff;
+  --carrier-purolator-bg: #ffffff;
+  --carrier-purolator-fg: #ed1b2e;
+  --carrier-auspost-bg: #dc1928;
+  --carrier-auspost-fg: #ffffff;
+  --carrier-gls-bg: #061ab1;
+  --carrier-gls-fg: #ffd100;
+  --carrier-postnl-bg: #ff6200;
+  --carrier-postnl-fg: #ffffff;
+  --carrier-inpost-bg: #ffcd00;
+  --carrier-inpost-fg: #1d1d1b;
+  --carrier-aramex-bg: #ffffff;
+  --carrier-aramex-fg: #e31837;
+  --carrier-sfexpress-bg: #1a1a1a;
+  --carrier-sfexpress-fg: #ffffff;
+  --carrier-japanpost-bg: #ffffff;
+  --carrier-japanpost-fg: #e60012;
 }
 
 .dark {
