@@ -10,4 +10,4 @@
 <!-- LOVABLE:END -->
 
 ## Project rules
-- Shipping carriers are defined once in `src/lib/carriers.ts` (logos as inline SVG paths in `src/lib/carrier-paths.ts`, brand colors as `--carrier-*` tokens in `src/styles.css`); `tracking_codes.carrier` stores the carrier id. Why: one list drives the picker and every display, and inline SVGs work on any host.
+- Shipping carriers are defined once in `src/lib/carriers.ts` (logos as inline SVG paths in `src/lib/carrier-paths.ts`, only from CC0/MIT sources like Simple Icons; carriers without a freely licensed logo use a `mark` lettermark; brand colors as `--carrier-*` tokens in `src/styles.css`); `tracking_codes.carrier` stores the carrier id. Why: one list drives the picker and every display, inline SVGs work on any host, and non-commercial logo sets can't be used in a paid product.
