@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Project rules
+- Shipping carriers are defined once in `src/lib/carriers.ts` (logos as inline SVG paths in `src/lib/carrier-paths.ts`, brand colors as `--carrier-*` tokens in `src/styles.css`); `tracking_codes.carrier` stores the carrier id. Why: one list drives the picker and every display, and inline SVGs work on any host.

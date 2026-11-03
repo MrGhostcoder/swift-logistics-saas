@@ -22,21 +22,16 @@ export function CarrierLogo({
   const c = getCarrier(carrier);
   const s = SIZES[size];
 
-  if (c.logo) {
+  if (c.path) {
     return (
       <span
         className={cn("inline-flex shrink-0 items-center justify-center border border-border", s.tile, className)}
         style={{ backgroundColor: `var(--carrier-${c.id}-bg)` }}
         aria-hidden
       >
-        <span
-          className={s.logo}
-          style={{
-            backgroundColor: `var(--carrier-${c.id}-fg)`,
-            WebkitMask: `url("${c.logo}") center / contain no-repeat`,
-            mask: `url("${c.logo}") center / contain no-repeat`,
-          }}
-        />
+        <svg viewBox="0 0 24 24" className={s.logo} style={{ fill: `var(--carrier-${c.id}-fg)` }}>
+          <path d={c.path} />
+        </svg>
       </span>
     );
   }
