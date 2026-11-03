@@ -111,32 +111,79 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          in_app_popups: boolean
+          push_account: boolean
+          push_enabled: boolean
+          push_shipment: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          in_app_popups?: boolean
+          push_account?: boolean
+          push_enabled?: boolean
+          push_shipment?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          in_app_popups?: boolean
+          push_account?: boolean
+          push_enabled?: boolean
+          push_shipment?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           body: string
           created_at: string
           id: string
+          kind: string
+          link: string | null
+          push_claimed_at: string | null
           read: boolean
           title: string
+          tracking_code_id: string | null
           user_id: string
         }
         Insert: {
           body?: string
           created_at?: string
           id?: string
+          kind?: string
+          link?: string | null
+          push_claimed_at?: string | null
           read?: boolean
           title: string
+          tracking_code_id?: string | null
           user_id: string
         }
         Update: {
           body?: string
           created_at?: string
           id?: string
+          kind?: string
+          link?: string | null
+          push_claimed_at?: string | null
           read?: boolean
           title?: string
+          tracking_code_id?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "notifications_tracking_code_id_fkey"
+            columns: ["tracking_code_id"]
+            isOneToOne: false
+            referencedRelation: "tracking_codes"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payments: {
         Row: {
@@ -285,6 +332,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      push_tokens: {
+        Row: {
+          created_at: string
+          device_label: string
+          id: string
+          last_seen_at: string
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_label?: string
+          id?: string
+          last_seen_at?: string
+          token: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_label?: string
+          id?: string
+          last_seen_at?: string
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       tracking_codes: {
         Row: {
@@ -532,6 +606,10 @@ export type Database = {
         Returns: boolean
       }
       my_wallet_balance: { Args: never; Returns: number }
+      register_push_token: {
+        Args: { _label: string; _token: string }
+        Returns: undefined
+      }
       reject_payment: {
         Args: { _note: string; _payment_id: string }
         Returns: undefined
@@ -545,6 +623,7 @@ export type Database = {
         Args: { _body: string; _code: string; _sender_name: string }
         Returns: undefined
       }
+      send_test_notification: { Args: never; Returns: string }
       settle_payment_onchain: {
         Args: { _amount: number; _payment_id: string; _tx_hash: string }
         Returns: undefined
