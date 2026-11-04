@@ -33,6 +33,7 @@ import { Route as AuthenticatedDashboardPaymentsRouteImport } from './routes/_au
 import { Route as AuthenticatedDashboardSettingsRouteImport } from './routes/_authenticated/dashboard.settings'
 import { Route as AuthenticatedDashboardWalletRouteImport } from './routes/_authenticated/dashboard.wallet'
 import { Route as AuthenticatedDashboardNotificationsIndexRouteImport } from './routes/_authenticated/dashboard.notifications.index'
+import { Route as AuthenticatedDashboardNotificationsSettingsRouteImport } from './routes/_authenticated/dashboard.notifications.settings'
 import { Route as AuthenticatedDashboardTrackingIndexRouteImport } from './routes/_authenticated/dashboard.tracking.index'
 import { Route as AuthenticatedDashboardTrackingIdRouteImport } from './routes/_authenticated/dashboard.tracking.$id'
 import { Route as AuthenticatedDashboardTrackingNewRouteImport } from './routes/_authenticated/dashboard.tracking.new'
@@ -168,6 +169,12 @@ const AuthenticatedDashboardNotificationsIndexRoute =
     path: '/notifications/',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const AuthenticatedDashboardNotificationsSettingsRoute =
+  AuthenticatedDashboardNotificationsSettingsRouteImport.update({
+    id: '/notifications/settings',
+    path: '/notifications/settings',
+    getParentRoute: () => AuthenticatedDashboardRoute,
+  } as any)
 const AuthenticatedDashboardTrackingIndexRoute =
   AuthenticatedDashboardTrackingIndexRouteImport.update({
     id: '/tracking/',
@@ -215,6 +222,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/notifications/settings': typeof AuthenticatedDashboardNotificationsSettingsRoute
   '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
   '/api/public/push/dispatch': typeof ApiPublicPushDispatchRoute
@@ -242,6 +250,7 @@ export interface FileRoutesByTo {
   '/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/notifications/settings': typeof AuthenticatedDashboardNotificationsSettingsRoute
   '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
   '/api/public/push/dispatch': typeof ApiPublicPushDispatchRoute
@@ -273,6 +282,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/wallet': typeof AuthenticatedDashboardWalletRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/notifications/settings': typeof AuthenticatedDashboardNotificationsSettingsRoute
   '/_authenticated/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/_authenticated/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
   '/api/public/push/dispatch': typeof ApiPublicPushDispatchRoute
@@ -304,6 +314,7 @@ export interface FileRouteTypes {
     | '/dashboard/wallet'
     | '/admin/'
     | '/dashboard/'
+    | '/dashboard/notifications/settings'
     | '/dashboard/tracking/$id'
     | '/dashboard/tracking/new'
     | '/api/public/push/dispatch'
@@ -331,6 +342,7 @@ export interface FileRouteTypes {
     | '/dashboard/wallet'
     | '/admin'
     | '/dashboard'
+    | '/dashboard/notifications/settings'
     | '/dashboard/tracking/$id'
     | '/dashboard/tracking/new'
     | '/api/public/push/dispatch'
@@ -361,6 +373,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/wallet'
     | '/_authenticated/admin/'
     | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/notifications/settings'
     | '/_authenticated/dashboard/tracking/$id'
     | '/_authenticated/dashboard/tracking/new'
     | '/api/public/push/dispatch'
@@ -551,6 +564,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardNotificationsIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/_authenticated/dashboard/notifications/settings': {
+      id: '/_authenticated/dashboard/notifications/settings'
+      path: '/notifications/settings'
+      fullPath: '/dashboard/notifications/settings'
+      preLoaderRoute: typeof AuthenticatedDashboardNotificationsSettingsRouteImport
+      parentRoute: typeof AuthenticatedDashboardRoute
+    }
     '/_authenticated/dashboard/tracking/': {
       id: '/_authenticated/dashboard/tracking/'
       path: '/tracking'
@@ -611,6 +631,7 @@ interface AuthenticatedDashboardRouteChildren {
   AuthenticatedDashboardSettingsRoute: typeof AuthenticatedDashboardSettingsRoute
   AuthenticatedDashboardWalletRoute: typeof AuthenticatedDashboardWalletRoute
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardNotificationsSettingsRoute: typeof AuthenticatedDashboardNotificationsSettingsRoute
   AuthenticatedDashboardTrackingIdRoute: typeof AuthenticatedDashboardTrackingIdRoute
   AuthenticatedDashboardTrackingNewRoute: typeof AuthenticatedDashboardTrackingNewRoute
   AuthenticatedDashboardNotificationsIndexRoute: typeof AuthenticatedDashboardNotificationsIndexRoute
@@ -624,6 +645,8 @@ const AuthenticatedDashboardRouteChildren: AuthenticatedDashboardRouteChildren =
     AuthenticatedDashboardSettingsRoute: AuthenticatedDashboardSettingsRoute,
     AuthenticatedDashboardWalletRoute: AuthenticatedDashboardWalletRoute,
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+    AuthenticatedDashboardNotificationsSettingsRoute:
+      AuthenticatedDashboardNotificationsSettingsRoute,
     AuthenticatedDashboardTrackingIdRoute:
       AuthenticatedDashboardTrackingIdRoute,
     AuthenticatedDashboardTrackingNewRoute:
