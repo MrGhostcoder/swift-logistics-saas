@@ -40,9 +40,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
       <main className="flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           <div className="mb-6 flex justify-center lg:hidden">
-            <Link to="/">
-              <Logo />
-            </Link>
+            <Logo />
           </div>
           {children}
         </div>
