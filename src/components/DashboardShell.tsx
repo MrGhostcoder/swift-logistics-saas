@@ -10,13 +10,7 @@ import { useIsAdmin } from "@/hooks/useAuth";
 
 export type NavItem = { to: string; label: string };
 
-export function DashboardShell({
-  nav,
-  children,
-}: {
-  nav: NavItem[];
-  children: React.ReactNode;
-}) {
+export function DashboardShell({ nav, children }: { nav: NavItem[]; children: React.ReactNode }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -34,35 +28,34 @@ export function DashboardShell({
       <header className="sticky top-0 z-30 border-b border-border bg-card">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
           <Logo />
-          <div className="hidden items-center gap-2 md:flex">
-            <TelegramButton />
-            <Link to="/dashboard">
-              <Button variant="ghost" size="sm">
-                Dashboard
-              </Button>
-            </Link>
-            {isAdmin && (
-              <Link to="/admin">
+          <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 md:flex">
+              <TelegramButton />
+              <Link to="/dashboard">
                 <Button variant="ghost" size="sm">
-                  Admin
+                  Dashboard
                 </Button>
               </Link>
-            )}
+              {isAdmin && (
+                <Link to="/admin">
+                  <Button variant="ghost" size="sm">
+                    Admin
+                  </Button>
+                </Link>
+              )}
 
-            <a href="/#features">
-              <Button variant="ghost" size="sm">
-                Help
-              </Button>
-            </a>
+              <a href="/#features">
+                <Button variant="ghost" size="sm">
+                  Help
+                </Button>
+              </a>
+            </div>
             <NotificationBell />
-            <Button variant="outline" size="sm" onClick={signOut}>
+            <Button variant="outline" size="sm" onClick={signOut} className="hidden md:inline-flex">
               Log Out
             </Button>
-          </div>
-          <div className="flex items-center gap-2 md:hidden">
-            <NotificationBell />
             <button
-              className="rounded-lg border border-border p-2"
+              className="rounded-lg border border-border p-2 md:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-label="Toggle menu"
             >
