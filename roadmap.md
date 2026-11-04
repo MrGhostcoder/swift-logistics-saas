@@ -6,4 +6,5 @@
 
 ## Notifications
 - [x] In-app: bell + unread counter + live updates, history page, settings page, shipment status notifications, locked-down access rules
-- [ ] Browser push via Firebase Cloud Messaging: device registration, Enable Notifications button, backend sender triggered by new notifications
+- [x] Browser push via Firebase Cloud Messaging: device registration, Enable Notifications button, backend sender triggered by new notifications
+- [ ] Confirm a real push arrives on a real browser — needs the site published (the backend sender runs on the published site) and the user to click Enable Notifications

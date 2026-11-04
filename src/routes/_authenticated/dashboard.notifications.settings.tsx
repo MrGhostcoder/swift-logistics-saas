@@ -105,7 +105,14 @@ function NotificationSettings() {
     if (res.status === "registered") {
       toast.success("Browser notifications are on for this device.");
     } else {
-      setProblem(res.status === "error" && res.message ? `${STATUS_COPY.error} (${res.message})` : STATUS_COPY[res.status]);
+      const refused = res.status === "error" && /permission denied|not allowed|incognito/i.test(res.message ?? "");
+      setProblem(
+        refused
+          ? "Your browser refused push. This happens in private or incognito windows, or when notifications are blocked for this site."
+          : res.status === "error" && res.message
+            ? `${STATUS_COPY.error} (${res.message})`
+            : STATUS_COPY[res.status],
+      );
     }
   }
 
