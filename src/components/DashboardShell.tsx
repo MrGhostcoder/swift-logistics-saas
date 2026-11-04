@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo, TelegramButton } from "@/components/brand";
+import { NotificationBell } from "@/components/NotificationBell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useAuth";
@@ -53,17 +54,21 @@ export function DashboardShell({
                 Help
               </Button>
             </a>
+            <NotificationBell />
             <Button variant="outline" size="sm" onClick={signOut}>
               Log Out
             </Button>
           </div>
-          <button
-            className="rounded-lg border border-border p-2 md:hidden"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <NotificationBell />
+            <button
+              className="rounded-lg border border-border p-2"
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Toggle menu"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
         {open && (
           <div className="space-y-2 border-t border-border px-4 py-4 md:hidden">

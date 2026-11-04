@@ -36,6 +36,7 @@ import { Route as AuthenticatedDashboardNotificationsIndexRouteImport } from './
 import { Route as AuthenticatedDashboardTrackingIndexRouteImport } from './routes/_authenticated/dashboard.tracking.index'
 import { Route as AuthenticatedDashboardTrackingIdRouteImport } from './routes/_authenticated/dashboard.tracking.$id'
 import { Route as AuthenticatedDashboardTrackingNewRouteImport } from './routes/_authenticated/dashboard.tracking.new'
+import { Route as ApiPublicPushDispatchRouteImport } from './routes/api/public/push/dispatch'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -185,6 +186,11 @@ const AuthenticatedDashboardTrackingNewRoute =
     path: '/tracking/new',
     getParentRoute: () => AuthenticatedDashboardRoute,
   } as any)
+const ApiPublicPushDispatchRoute = ApiPublicPushDispatchRouteImport.update({
+  id: '/api/public/push/dispatch',
+  path: '/api/public/push/dispatch',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -211,6 +217,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
+  '/api/public/push/dispatch': typeof ApiPublicPushDispatchRoute
   '/dashboard/notifications/': typeof AuthenticatedDashboardNotificationsIndexRoute
   '/dashboard/tracking/': typeof AuthenticatedDashboardTrackingIndexRoute
 }
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
+  '/api/public/push/dispatch': typeof ApiPublicPushDispatchRoute
   '/dashboard/notifications': typeof AuthenticatedDashboardNotificationsIndexRoute
   '/dashboard/tracking': typeof AuthenticatedDashboardTrackingIndexRoute
 }
@@ -267,6 +275,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/tracking/$id': typeof AuthenticatedDashboardTrackingIdRoute
   '/_authenticated/dashboard/tracking/new': typeof AuthenticatedDashboardTrackingNewRoute
+  '/api/public/push/dispatch': typeof ApiPublicPushDispatchRoute
   '/_authenticated/dashboard/notifications/': typeof AuthenticatedDashboardNotificationsIndexRoute
   '/_authenticated/dashboard/tracking/': typeof AuthenticatedDashboardTrackingIndexRoute
 }
@@ -297,6 +306,7 @@ export interface FileRouteTypes {
     | '/dashboard/'
     | '/dashboard/tracking/$id'
     | '/dashboard/tracking/new'
+    | '/api/public/push/dispatch'
     | '/dashboard/notifications/'
     | '/dashboard/tracking/'
   fileRoutesByTo: FileRoutesByTo
@@ -323,6 +333,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/tracking/$id'
     | '/dashboard/tracking/new'
+    | '/api/public/push/dispatch'
     | '/dashboard/notifications'
     | '/dashboard/tracking'
   id:
@@ -352,6 +363,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/tracking/$id'
     | '/_authenticated/dashboard/tracking/new'
+    | '/api/public/push/dispatch'
     | '/_authenticated/dashboard/notifications/'
     | '/_authenticated/dashboard/tracking/'
   fileRoutesById: FileRoutesById
@@ -366,6 +378,7 @@ export interface RootRouteChildren {
   CheckoutPlanIdRoute: typeof CheckoutPlanIdRoute
   TrackCodeRoute: typeof TrackCodeRoute
   TrackIndexRoute: typeof TrackIndexRoute
+  ApiPublicPushDispatchRoute: typeof ApiPublicPushDispatchRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -559,6 +572,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardTrackingNewRouteImport
       parentRoute: typeof AuthenticatedDashboardRoute
     }
+    '/api/public/push/dispatch': {
+      id: '/api/public/push/dispatch'
+      path: '/api/public/push/dispatch'
+      fullPath: '/api/public/push/dispatch'
+      preLoaderRoute: typeof ApiPublicPushDispatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -642,6 +662,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutPlanIdRoute: CheckoutPlanIdRoute,
   TrackCodeRoute: TrackCodeRoute,
   TrackIndexRoute: TrackIndexRoute,
+  ApiPublicPushDispatchRoute: ApiPublicPushDispatchRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
