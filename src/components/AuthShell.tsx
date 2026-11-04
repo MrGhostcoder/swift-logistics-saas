@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
 import { Gift, MapPin, ShieldCheck, Zap } from "lucide-react";
 import { Logo } from "@/components/brand";
 
