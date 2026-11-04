@@ -52,7 +52,7 @@ async function getMessagingToken(): Promise<string | null> {
   const registration = await navigator.serviceWorker.register(`/firebase-messaging-sw.js?${query}`);
   await navigator.serviceWorker.ready;
   const app = getApps()[0] ?? initializeApp(firebaseConfig);
-  return (await getToken(getMessaging(app), { vapidKey, serviceWorkerRegistration: registration })) || null;
+  return (await getToken(getMessaging(app), { vapidKey: vapidKey ?? "", serviceWorkerRegistration: registration })) || null;
 }
 
 const TOKEN_KEY = "swifttrack-push-token";
