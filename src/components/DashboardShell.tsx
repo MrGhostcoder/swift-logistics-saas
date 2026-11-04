@@ -3,19 +3,14 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Logo, TelegramButton } from "@/components/brand";
+import { NotificationBell } from "@/components/NotificationBell";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsAdmin } from "@/hooks/useAuth";
 
 export type NavItem = { to: string; label: string };
 
-export function DashboardShell({
-  nav,
-  children,
-}: {
-  nav: NavItem[];
-  children: React.ReactNode;
-}) {
+export function DashboardShell({ nav, children }: { nav: NavItem[]; children: React.ReactNode }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
@@ -33,37 +28,40 @@ export function DashboardShell({
       <header className="sticky top-0 z-30 border-b border-border bg-card">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
           <Logo />
-          <div className="hidden items-center gap-2 md:flex">
-            <TelegramButton />
-            <Link to="/dashboard">
-              <Button variant="ghost" size="sm">
-                Dashboard
-              </Button>
-            </Link>
-            {isAdmin && (
-              <Link to="/admin">
+          <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 md:flex">
+              <TelegramButton />
+              <Link to="/dashboard">
                 <Button variant="ghost" size="sm">
-                  Admin
+                  Dashboard
                 </Button>
               </Link>
-            )}
+              {isAdmin && (
+                <Link to="/admin">
+                  <Button variant="ghost" size="sm">
+                    Admin
+                  </Button>
+                </Link>
+              )}
 
-            <a href="/#features">
-              <Button variant="ghost" size="sm">
-                Help
-              </Button>
-            </a>
-            <Button variant="outline" size="sm" onClick={signOut}>
+              <a href="/#features">
+                <Button variant="ghost" size="sm">
+                  Help
+                </Button>
+              </a>
+            </div>
+            <NotificationBell />
+            <Button variant="outline" size="sm" onClick={signOut} className="hidden md:inline-flex">
               Log Out
             </Button>
+            <button
+              className="rounded-lg border border-border p-2 md:hidden"
+              onClick={() => setOpen((v) => !v)}
+              aria-label="Toggle menu"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
-          <button
-            className="rounded-lg border border-border p-2 md:hidden"
-            onClick={() => setOpen((v) => !v)}
-            aria-label="Toggle menu"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
         {open && (
           <div className="space-y-2 border-t border-border px-4 py-4 md:hidden">

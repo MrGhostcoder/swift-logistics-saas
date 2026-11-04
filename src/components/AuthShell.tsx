@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
 import { Gift, MapPin, ShieldCheck, Zap } from "lucide-react";
 import { Logo } from "@/components/brand";
 
@@ -15,9 +14,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
     <div className="grid min-h-screen bg-background lg:grid-cols-2">
       <aside className="relative hidden overflow-hidden bg-gradient-to-br from-primary/15 via-background to-accent/40 p-12 lg:flex lg:flex-col lg:justify-between">
         <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
-        <Link to="/">
-          <Logo />
-        </Link>
+        <Logo />
         <div className="relative">
           <h2 className="text-4xl font-extrabold leading-tight">
             Ship smarter.
@@ -42,9 +39,7 @@ export function AuthShell({ children }: { children: ReactNode }) {
       <main className="flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
           <div className="mb-6 flex justify-center lg:hidden">
-            <Link to="/">
-              <Logo />
-            </Link>
+            <Logo />
           </div>
           {children}
         </div>
