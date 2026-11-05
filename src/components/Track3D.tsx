@@ -101,11 +101,11 @@ function CameraFit() {
     const aspect = size.width / Math.max(size.height, 1);
     const v = THREE.MathUtils.degToRad(cam.fov / 2);
     const h = Math.atan(Math.tan(v) * aspect);
-    const dist = Math.max(3.5 / Math.tan(h), 2.4 / Math.tan(v));
+    const dist = Math.max(3.5 / Math.tan(h), 3.4 / Math.tan(v));
     const target = DIR.clone().multiplyScalar(dist);
     if (cam.position.distanceTo(target) > 0.001) {
       cam.position.lerp(target, 0.2);
-      cam.lookAt(0, 0.1, 0);
+      cam.lookAt(0, -0.2, 0.3);
       cam.updateProjectionMatrix();
     }
   });
