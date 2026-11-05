@@ -106,7 +106,7 @@ export default function Track3D({
       <Canvas
         shadows
         dpr={[1, 2]}
-        camera={{ position: [0, 3.2, 5.2], fov: 38 }}
+        camera={{ position: [0, 3.6, 6], fov: 38 }}
         gl={{ antialias: true, alpha: true }}
       >
         <ambientLight intensity={0.6} />
@@ -115,9 +115,9 @@ export default function Track3D({
           <Lightformer intensity={2} position={[0, 5, 0]} scale={[10, 10, 1]} />
           <Lightformer intensity={1} color="#ffd9b8" position={[-5, 1, -1]} rotation-y={Math.PI / 2} scale={[20, 1, 1]} />
         </Environment>
-        <group position={[0, -0.6, 0]}>
+        <group position={[0, -0.2, 0]}>
           <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-            <circleGeometry args={[3.6, 64]} />
+            <circleGeometry args={[3.1, 64]} />
             <meshStandardMaterial color={GROUND} roughness={1} />
           </mesh>
           <Route progress={progress} />
