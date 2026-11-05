@@ -50,9 +50,9 @@ function Parcel({ progress }: { progress: number | null }) {
     if (!ref.current) return;
     // Idle: loop along the route. Tracked: ease toward the real progress.
     const target = progress === null ? (t.current * 0.12) % 1 : progress;
-    const cur = ref.current.userData.p ?? 0;
+    const cur = ref.current.userData["p"] ?? 0;
     const p = progress === null ? target : cur + (target - cur) * (1 - Math.exp(-3 * dt));
-    ref.current.userData.p = p;
+    ref.current.userData["p"] = p;
     const pos = curve.getPointAt(Math.min(Math.max(p, 0), 1));
     ref.current.position.set(pos.x, pos.y + 0.35 + Math.sin(t.current * 2) * 0.05, pos.z);
     ref.current.rotation.y += dt * 0.6;
