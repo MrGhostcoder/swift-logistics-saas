@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Environment, Lightformer, RoundedBox, Float, ContactShadows } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -92,6 +92,26 @@ function Route({ progress }: { progress: number | null }) {
   );
 }
 
+// Fit the whole floor + pins in view at any aspect ratio (phones are tall, laptops wide).
+const DIR = new THREE.Vector3(0, 3.6, 6).normalize();
+function CameraFit() {
+  const { camera, size } = useThree();
+  useFrame(() => {
+    const cam = camera as THREE.PerspectiveCamera;
+    const aspect = size.width / Math.max(size.height, 1);
+    const v = THREE.MathUtils.degToRad(cam.fov / 2);
+    const h = Math.atan(Math.tan(v) * aspect);
+    const dist = Math.max(3.5 / Math.tan(h), 2.4 / Math.tan(v));
+    const target = DIR.clone().multiplyScalar(dist);
+    if (cam.position.distanceTo(target) > 0.001) {
+      cam.position.lerp(target, 0.2);
+      cam.lookAt(0, 0.1, 0);
+      cam.updateProjectionMatrix();
+    }
+  });
+  return null;
+}
+
 export default function Track3D({
   progress = null,
   delivered = false,
@@ -109,6 +129,7 @@ export default function Track3D({
         camera={{ position: [0, 3.6, 6], fov: 38 }}
         gl={{ antialias: true, alpha: true }}
       >
+        <CameraFit />
         <ambientLight intensity={0.6} />
         <directionalLight position={[3, 6, 4]} intensity={1.6} castShadow />
         <Environment resolution={64}>
