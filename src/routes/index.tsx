@@ -1,5 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, ClientOnly } from "@tanstack/react-router";
+import { useState, lazy, Suspense } from "react";
+const Track3D = lazy(() => import("@/components/Track3D"));
+const PROGRESS_3D: Record<string, number> = {
+  pending: 0.06, label_created: 0.12, processing: 0.25, picked_up: 0.35,
+  in_transit: 0.55, out_for_delivery: 0.85, delivered: 1, exception: 0.5,
+};
 import icon3dPackage from "@/assets/icon3d-package.png";
 import icon3dTruck from "@/assets/icon3d-truck.png";
 import icon3dLink from "@/assets/icon3d-link.png";
@@ -176,6 +181,14 @@ function Home() {
                 account, no waiting, no guesswork.
               </p>
 
+              {!result && (
+                <ClientOnly fallback={<div className="mx-auto mt-6 h-56 sm:h-64" />}>
+                  <Suspense fallback={<div className="mx-auto mt-6 h-56 sm:h-64" />}>
+                    <Track3D className="mx-auto mt-6 h-56 max-w-xl sm:h-64" />
+                  </Suspense>
+                </ClientOnly>
+              )}
+
               <form
                 onSubmit={track}
                 className="surface-elevated mt-9 flex flex-col gap-3 p-2.5 sm:flex-row"
@@ -227,6 +240,19 @@ function Home() {
                     </div>
                     <StatusBadge status={result.tc.status} />
                   </div>
+
+                  <ClientOnly fallback={<div className="mt-5 h-60" />}>
+                    <Suspense fallback={<div className="mt-5 h-60" />}>
+                      <Track3D
+                        className="mt-5 h-60 overflow-hidden rounded-2xl bg-muted/40"
+                        progress={PROGRESS_3D[result.tc.status] ?? 0.35}
+                        delivered={result.tc.status === "delivered"}
+                      />
+                    </Suspense>
+                  </ClientOnly>
+                  <p className="sr-only">
+                    Route progress {Math.round((PROGRESS_3D[result.tc.status] ?? 0.35) * 100)}%.
+                  </p>
 
                   <div className="mt-5 grid gap-4 sm:grid-cols-2">
                     <div className="flex items-start gap-2.5 rounded-xl bg-muted/50 p-3.5">
