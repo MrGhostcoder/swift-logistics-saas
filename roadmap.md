@@ -1,6 +1,7 @@
 # SwiftTrack roadmap
 
 ## Password recovery
+- [x] Capture recovery callbacks before page initialization, forward old login links, and preserve recovery state across refresh
 - [x] Add public reset-password page and repair reset links from sign-in and settings
 - [x] Add password visibility eye controls to login, signup, and recovery forms
 - [x] Verify password visibility controls, invalid reset links, reset request confirmation, and phone layout
