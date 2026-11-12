@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AuthShell, FreeTrackingBadge } from "@/components/AuthShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { GoogleButton } from "@/components/GoogleButton";
@@ -18,6 +19,8 @@ export const Route = createFileRoute("/signup")({
       },
       { property: "og:title", content: "Create Account — SwiftTrack" },
       { property: "og:description", content: "Start issuing shipment tracking codes in minutes." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: SignupPage,
@@ -87,14 +90,21 @@ function SignupPage() {
             ).map((f) => (
               <div key={f.key}>
                 <Label htmlFor={f.key}>{f.label}</Label>
-                <Input
+                {f.type === "password" ? <PasswordInput
+                  id={f.key}
+                  autoComplete="new-password"
+                  required
+                  value={form[f.key]}
+                  onChange={(e) => set(f.key, e.target.value)}
+                  className="mt-1.5"
+                /> : <Input
                   id={f.key}
                   type={f.type}
                   required
                   value={form[f.key]}
                   onChange={(e) => set(f.key, e.target.value)}
                   className="mt-1.5"
-                />
+                />}
               </div>
             ))}
             <Button className="w-full" size="lg" disabled={loading}>

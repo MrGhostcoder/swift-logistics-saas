@@ -3,6 +3,7 @@ import { useState } from "react";
 import { AuthShell, FreeTrackingBadge } from "@/components/AuthShell";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/login")({
       { name: "description", content: "Log in to your SwiftTrack account to manage tracking codes." },
       { property: "og:title", content: "Log In — SwiftTrack Dashboard" },
       { property: "og:description", content: "Access your SwiftTrack shipment dashboard." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: LoginPage,
@@ -67,9 +70,9 @@ function LoginPage() {
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
+                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
