@@ -57,7 +57,7 @@ function ForgotPage() {
           <h1 className="text-2xl font-extrabold">{sent ? "Check your email" : "Forgot password?"}</h1>
           {sent ? (
             <p role="status" className="mt-3 break-words text-sm text-muted-foreground">
-              If an account exists for {email.trim()}, a reset link is on its way. Check your inbox and spam folder.
+              If an account exists for {email.trim()}, a reset link is on its way. Check your inbox and spam folder. Open only the newest reset email; older links stop working after a new request.
             </p>
           ) : (
             <form className="mt-6 space-y-4" onSubmit={submit}>
@@ -81,6 +81,7 @@ function ForgotPage() {
               </Button>
             </form>
           )}
+          {sent && <Button type="button" variant="outline" className="mt-4 w-full" onClick={() => { setSent(false); setError(""); }}>Use a different email or request another link</Button>}
           <p className="mt-5 text-center text-sm text-muted-foreground">
             <Link to="/login" className="font-semibold text-primary">
               Back to login

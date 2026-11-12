@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { clearRecovery, hasRecovery } from "@/lib/password-recovery";
 
 export const Route = createFileRoute("/reset-password")({
   head: () => ({
@@ -30,20 +31,25 @@ function ResetPasswordPage() {
 
   useEffect(() => {
     let active = true;
-    let recovery = new URLSearchParams(window.location.hash.slice(1)).get("type") === "recovery";
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    const linkError = params.has("error");
+    async function validate() {
+      try {
+        const { data, error } = await supabase.auth.getUser();
+        if (active) setState(!linkError && data.user && !error && hasRecovery(data.user.id) ? "ready" : "invalid");
+      } catch {
+        if (active) setState("invalid");
+      }
+    }
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") {
-        recovery = true;
-        if (active) setState("ready");
+        // Auth methods must run outside the auth event callback lock.
+        setTimeout(() => { if (active) void validate(); }, 0);
       } else if (event === "SIGNED_OUT" && active) {
         setState((current) => current === "done" ? "done" : "invalid");
       }
     });
-    void supabase.auth.getUser().then(({ data, error }) => {
-      if (active) setState(recovery && data.user && !error ? "ready" : "invalid");
-    }).catch(() => {
-      if (active) setState("invalid");
-    });
+    void validate();
     return () => { active = false; subscription.unsubscribe(); };
   }, []);
 
@@ -60,9 +66,10 @@ function ResetPasswordPage() {
       const { error } = await supabase.auth.updateUser({ password });
       if (error) { setError(error.message); return; }
       setState("done");
+      clearRecovery();
       setPassword("");
       setConfirm("");
-      await supabase.auth.signOut();
+      await supabase.auth.signOut({ scope: "local" });
     } catch {
       setError("Your password could not be updated. Please try again.");
     } finally {
@@ -80,7 +87,7 @@ function ResetPasswordPage() {
         {state === "checking" && <p className="mt-3 text-sm text-muted-foreground" role="status">Checking your reset link…</p>}
         {state === "invalid" && (
           <div className="mt-4 space-y-5">
-            <p className="text-sm text-muted-foreground" role="alert">This reset link is missing, expired, or has already been used.</p>
+            <p className="text-sm text-muted-foreground" role="alert">This reset link is missing, expired, or has already been used. Request a new email and open only its newest link once.</p>
             <Button asChild className="w-full"><Link to="/forgot-password">Request a new reset link</Link></Button>
           </div>
         )}

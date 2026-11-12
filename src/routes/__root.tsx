@@ -8,11 +8,13 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { supabase } from "@/integrations/supabase/client";
+import { recordRecovery } from "@/lib/password-recovery";
 
 function NotFoundComponent() {
   return (
@@ -122,6 +124,22 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  // Register before child forms' passive effects initialize/check auth.
+  useLayoutEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      recordRecovery(event, session);
+      if (event === "PASSWORD_RECOVERY") {
+        setTimeout(() => { void router.navigate({ to: "/reset-password", replace: true }); }, 0);
+      }
+    });
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    if (params.has("error") && window.location.pathname !== "/reset-password") {
+      void router.navigate({ to: "/reset-password", replace: true });
+    }
+    return () => subscription.unsubscribe();
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>
