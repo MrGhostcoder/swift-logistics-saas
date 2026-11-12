@@ -3,7 +3,8 @@
 ## Password recovery
 - [x] Add public reset-password page and repair reset links from sign-in and settings
 - [x] Add password visibility eye controls to login, signup, and recovery forms
-- [ ] Verify password controls and recovery page behavior
+- [x] Verify password visibility controls, invalid reset links, reset request confirmation, and phone layout
+- [ ] Verify emailed recovery link through password save — requires a fresh recovery email; no account password was changed during testing
 
 - [x] Real USDT TRC20 wallet (TALCMZDwrXy9npuTG2sVZxALUgKUjSGneQ) saved in admin settings
 - [x] On-chain auto-verification of USDT payments (TronGrid) → payments auto-approve and activate plans
