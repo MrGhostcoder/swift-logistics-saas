@@ -1,19 +1,21 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Logo } from "@/components/brand";
+import { AuthShell } from "@/components/AuthShell";
+import { Mail, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 export const Route = createFileRoute("/forgot-password")({
   head: () => ({
     meta: [
-      { title: "Reset Password — SwiftTrack" },
+      { title: "Forgot Password — SwiftTrack" },
       { name: "description", content: "Reset the password for your SwiftTrack account." },
-      { property: "og:title", content: "Reset Password — SwiftTrack" },
+      { property: "og:title", content: "Forgot Password — SwiftTrack" },
       { property: "og:description", content: "Request a password reset link for SwiftTrack." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ForgotPage,
@@ -22,30 +24,40 @@ export const Route = createFileRoute("/forgot-password")({
 function ForgotPage() {
   const [email, setEmail] = useState("");
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/login`,
-    });
-    if (error) {
-      toast.error("Something went wrong. Please try again.");
-      return;
+    if (loading) return;
+    setLoading(true);
+    setError("");
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) {
+        setError(error.message);
+        return;
+      }
+      setSent(true);
+    } catch {
+      setError("Could not send your reset link. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    setSent(true);
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="w-full max-w-md">
-        <div className="flex justify-center">
-          <Logo />
-        </div>
-        <div className="surface mt-6 p-7">
-          <h1 className="text-2xl font-extrabold">Forgot password</h1>
+    <AuthShell>
+        <div className="surface p-7">
+          <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            {sent ? <CheckCircle2 aria-hidden="true" /> : <Mail aria-hidden="true" />}
+          </div>
+          <h1 className="text-2xl font-extrabold">{sent ? "Check your email" : "Forgot password?"}</h1>
           {sent ? (
-            <p className="mt-3 text-sm text-muted-foreground">
-              If an account exists for {email}, a reset link is on its way.
+            <p role="status" className="mt-3 break-words text-sm text-muted-foreground">
+              If an account exists for {email.trim()}, a reset link is on its way. Check your inbox and spam folder.
             </p>
           ) : (
             <form className="mt-6 space-y-4" onSubmit={submit}>
@@ -54,14 +66,18 @@ function ForgotPage() {
                 <Input
                   id="email"
                   type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  disabled={loading}
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="mt-1.5"
                 />
               </div>
-              <Button className="w-full" size="lg">
-                Send reset link
+              {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+              <Button type="submit" className="w-full" size="lg" disabled={loading}>
+                {loading ? "Sending…" : "Send reset link"}
               </Button>
             </form>
           )}
@@ -71,7 +87,6 @@ function ForgotPage() {
             </Link>
           </p>
         </div>
-      </div>
-    </div>
+    </AuthShell>
   );
 }

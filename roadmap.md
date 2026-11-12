@@ -1,5 +1,10 @@
 # SwiftTrack roadmap
 
+## Password recovery
+- [x] Add public reset-password page and repair reset links from sign-in and settings
+- [x] Add password visibility eye controls to login, signup, and recovery forms
+- [ ] Verify password controls and recovery page behavior
+
 - [x] Real USDT TRC20 wallet (TALCMZDwrXy9npuTG2sVZxALUgKUjSGneQ) saved in admin settings
 - [x] On-chain auto-verification of USDT payments (TronGrid) → payments auto-approve and activate plans
 - [ ] Vercel deployment — needs the user to connect the GitHub repo to Vercel (vercel.json is already in the repo)
