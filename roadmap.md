@@ -1,5 +1,10 @@
 # SwiftTrack roadmap
 
+## Referrals
+- [ ] Add personal invite links, new-user attribution, and referral history
+- [ ] Credit inviter wallet bonuses only after approved USDT top-ups, with duplicate/self-referral protection — awaiting bonus amount and first-versus-every-purchase choice
+- [ ] Test signup attribution and approved, pending, rejected, and repeat top-up rewards
+
 ## Mobile tracking
 - [x] Compact tracking lookup/results and inline lightweight parcel scene
 - [x] Verify real shipment lookup at 320px/390px and desktop, stopped parcel animation, reduced motion, and no 3D-engine requests
