@@ -43,6 +43,13 @@
       "when": 1793710364063,
       "tag": "0005_notification_system",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795099504112,
+      "tag": "0006_referral_wallet_rewards",
+      "breakpoints": true
     }
   ]
 }

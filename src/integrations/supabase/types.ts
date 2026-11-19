@@ -360,6 +360,108 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_codes: {
+        Row: {
+          code: string
+          user_id: string
+        }
+        Insert: {
+          code?: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_codes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referral_rewards: {
+        Row: {
+          amount: number
+          created_at: string
+          invitee_id: string
+          inviter_id: string
+          topup_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          invitee_id: string
+          inviter_id: string
+          topup_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          invitee_id?: string
+          inviter_id?: string
+          topup_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_rewards_invitee_id_fkey"
+            columns: ["invitee_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_rewards_inviter_id_fkey"
+            columns: ["inviter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referral_rewards_topup_id_fkey"
+            columns: ["topup_id"]
+            isOneToOne: true
+            referencedRelation: "wallet_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          created_at: string
+          invitee_id: string
+          inviter_id: string
+        }
+        Insert: {
+          created_at?: string
+          invitee_id: string
+          inviter_id: string
+        }
+        Update: {
+          created_at?: string
+          invitee_id?: string
+          inviter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_invitee_id_fkey"
+            columns: ["invitee_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_inviter_id_fkey"
+            columns: ["inviter_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tracking_codes: {
         Row: {
           carrier: string
@@ -582,6 +684,7 @@ export type Database = {
         Returns: undefined
       }
       approve_payment: { Args: { _payment_id: string }; Returns: undefined }
+      claim_referral: { Args: { _code: string }; Returns: boolean }
       generate_tracking_code: { Args: never; Returns: string }
       get_checkout_settings: {
         Args: never
@@ -605,6 +708,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      my_referral_code: { Args: never; Returns: string }
       my_wallet_balance: { Args: never; Returns: number }
       register_push_token: {
         Args: { _label: string; _token: string }
