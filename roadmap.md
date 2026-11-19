@@ -1,5 +1,9 @@
 # SwiftTrack roadmap
 
+## Mobile tracking
+- [x] Compact tracking lookup/results and inline lightweight parcel scene
+- [x] Verify real shipment lookup at 320px/390px and desktop, stopped parcel animation, reduced motion, and no 3D-engine requests
+
 ## Password recovery
 - [x] Capture recovery callbacks before page initialization, forward old login links, and preserve recovery state across refresh
 - [x] Add public reset-password page and repair reset links from sign-in and settings

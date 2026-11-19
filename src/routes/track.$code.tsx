@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { formatDate, formatDateTime, trackingUrl, STATUS_LABEL, type ShipStatus } from "@/lib/swift";
 import { toast } from "sonner";
+import { ParcelScene } from "@/components/ParcelScene";
 
 export const Route = createFileRoute("/track/$code")({
   head: ({ params }) => ({
@@ -21,6 +22,8 @@ export const Route = createFileRoute("/track/$code")({
         content: `Live shipment status, location history and estimated delivery for tracking code ${params.code}.`,
       },
       { property: "og:title", content: `Tracking ${params.code} — SwiftTrack` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       {
         property: "og:description",
         content: `Follow shipment ${params.code} from pickup to delivery.`,
@@ -59,7 +62,7 @@ function TrackDetail() {
   const [name, setName] = useState("");
   const [body, setBody] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["track", code],
     queryFn: async () => {
       const { data: result, error } = await supabase.rpc("get_public_tracking", {
@@ -110,11 +113,18 @@ function TrackDetail() {
   const url = trackingUrl(code.toUpperCase());
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="tracking-page flex min-h-screen flex-col bg-background">
       <SiteHeader bare />
-      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-10">
+      <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-5 sm:py-10">
+        <ParcelScene />
         {isLoading ? (
           <Skeletons rows={5} />
+        ) : isError ? (
+          <div className="py-8 text-center" role="alert">
+            <h1 className="text-xl font-bold">Unable to load your shipment</h1>
+            <p className="mt-2 text-sm text-muted-foreground">Check your connection and try again.</p>
+            <Button className="mt-4" onClick={() => refetch()}>Retry</Button>
+          </div>
         ) : !data ? (
           <div className="surface p-12 text-center">
             <PackageX className="mx-auto h-10 w-10 text-muted-foreground" />
@@ -127,31 +137,37 @@ function TrackDetail() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-6">
-            <div className="surface p-6 sm:p-8">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
+          <div className="space-y-5">
+            <div className="border-b border-border pb-5 sm:pb-8">
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 sm:flex sm:justify-between">
+                <div className="min-w-0">
                   <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     Tracking number
                   </p>
-                  <p className="font-mono text-2xl font-bold">{data.tc.code}</p>
-                  <p className="mt-3 text-3xl font-extrabold uppercase text-primary">
+                  <h1 className="break-all font-mono text-xl font-bold sm:text-2xl">{data.tc.code}</h1>
+                  <p className="mt-2 text-xl font-extrabold text-primary sm:text-3xl">
                     {STATUS_LABEL[data.tc.status as ShipStatus]}
                   </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex shrink-0 gap-2">
                   <Button
                     variant="outline"
-                    size="sm"
+                    size="icon"
+                    aria-label="Copy tracking link"
+                    title="Copy tracking link"
+                    className="h-11 w-11"
                     onClick={() => {
                       navigator.clipboard.writeText(url);
                       toast.success("Tracking link copied.");
                     }}
                   >
-                    <Copy className="mr-2 h-4 w-4" /> Copy Tracking Link
+                    <Copy className="h-4 w-4" />
                   </Button>
                   <Button
-                    size="sm"
+                    size="icon"
+                    aria-label="Share tracking link"
+                    title="Share tracking link"
+                    className="h-11 w-11"
                     onClick={async () => {
                       if (navigator.share) {
                         await navigator.share({ title: `Tracking ${data.tc.code}`, url });
@@ -161,12 +177,12 @@ function TrackDetail() {
                       }
                     }}
                   >
-                    <Share2 className="mr-2 h-4 w-4" /> Share
+                    <Share2 className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
 
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
                 <Info icon={MapPin} label="Current Location" value={data.tc.current_location} />
                 <Info icon={Truck} label="Destination" value={data.tc.destination} />
                 <Info
@@ -185,7 +201,7 @@ function TrackDetail() {
               latestEvent={data.events[data.events.length - 1]}
             />
 
-            <div className="surface p-6 sm:p-8">
+            <div className="border-b border-border py-5 sm:py-8">
               <h2 className="text-lg font-bold">Tracking Timeline</h2>
               <ol className="mt-6 space-y-0">
                 {data.events.map((ev, i) => {
@@ -208,7 +224,7 @@ function TrackDetail() {
                         </span>
                         {i < data.events.length - 1 && <span className="w-px flex-1 bg-border" />}
                       </div>
-                      <div className="pb-7">
+                      <div className="min-w-0 break-words pb-7">
                         <p className="text-sm font-semibold">{ev.title}</p>
                         <p className="text-xs text-muted-foreground">
                           {formatDateTime(ev.occurred_at)}
@@ -355,8 +371,8 @@ function RouteMap({
   }, [progress]);
 
   return (
-    <div className="surface overflow-hidden">
-      <div className="flex items-center justify-between px-6 pt-6 sm:px-8">
+    <div className="overflow-hidden border-b border-border pb-4">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 pt-3">
         <h2 className="flex items-center gap-2 text-lg font-bold">
           <Navigation className="h-4 w-4 text-primary" /> Live Route
         </h2>
@@ -370,8 +386,8 @@ function RouteMap({
           </span>
         )}
       </div>
-      <div className="map-grid relative mx-6 mb-2 mt-4 sm:mx-8">
-        <svg viewBox="0 0 500 160" className="h-44 w-full" aria-hidden="true" focusable="false">
+      <div className="map-grid relative mb-2 mt-3">
+        <svg viewBox="0 0 500 160" className="h-28 w-full sm:h-44" aria-hidden="true" focusable="false">
           {/* base route */}
           <path
             d={ROUTE_PATH}
@@ -419,7 +435,7 @@ function RouteMap({
           )}
         </svg>
       </div>
-      <div className="flex items-center justify-between gap-4 border-t border-border px-6 py-4 text-xs sm:px-8">
+      <div className="grid grid-cols-3 gap-3 border-t border-border py-3 text-xs sm:flex sm:justify-between">
         <div className="min-w-0">
           <p className="font-semibold uppercase tracking-wide text-muted-foreground">Origin</p>
           <p className="mt-0.5 truncate font-semibold">{origin || "—"}</p>
@@ -440,7 +456,7 @@ function RouteMap({
       </div>
       <section
         aria-labelledby="route-summary-heading"
-        className="space-y-3 border-t border-border bg-muted/40 px-6 py-4 text-sm sm:px-8"
+        className="space-y-3 border-t border-border py-4 text-sm"
       >
         <h3 id="route-summary-heading" className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
           Route summary
@@ -502,11 +518,11 @@ function Info({
   value?: string | null;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-muted/40 p-4">
+    <div className="min-w-0 border-l-2 border-primary/30 pl-3 py-1">
       <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
         <Icon className="h-3.5 w-3.5" /> {label}
       </p>
-      <p className="mt-1.5 text-sm font-semibold">{value || "—"}</p>
+      <p className="mt-1 break-words text-sm font-semibold">{value || "—"}</p>
     </div>
   );
 }

@@ -325,3 +325,18 @@
 @utility animate-truck-bob {
   animation: truck-bob 2.2s ease-in-out infinite;
 }
+
+.parcel-scene { height: 116px; }
+.parcel-arrival { animation: parcel-arrive 1.2s ease-out both; }
+@keyframes parcel-arrive {
+  from { transform: translate(-70px, -8px); opacity: 0; }
+  to { transform: translate(0, 0); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .parcel-arrival { animation: none; }
+  .tracking-page *, .tracking-page *::before, .tracking-page *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .tracking-page animateMotion { display: none; }
+}

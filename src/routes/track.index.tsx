@@ -5,6 +5,7 @@ import { SiteHeader, SiteFooter } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { ParcelScene } from "@/components/ParcelScene";
 
 export const Route = createFileRoute("/track/")({
   head: () => ({
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/track/")({
       },
       { property: "og:title", content: "Track a Package — SwiftTrack" },
       { property: "og:description", content: "Live shipment status for any SwiftTrack tracking code." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: TrackSearch,
@@ -26,9 +29,10 @@ function TrackSearch() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="tracking-page flex min-h-screen flex-col bg-background">
       <SiteHeader bare />
-      <section className="mx-auto w-full max-w-xl flex-1 px-4 py-20">
+      <section className="mx-auto w-full max-w-xl flex-1 px-4 py-8 sm:py-16">
+        <ParcelScene />
         <h1 className="text-center text-3xl font-extrabold">Track a Package</h1>
         <p className="mt-2 text-center text-muted-foreground">
           No account required — just your tracking code.
@@ -51,6 +55,12 @@ function TrackSearch() {
               value={code}
               onChange={(e) => setCode(e.target.value)}
               placeholder="Enter tracking code"
+              aria-label="Tracking code"
+              autoCapitalize="characters"
+              autoCorrect="off"
+              spellCheck={false}
+              enterKeyHint="go"
+              required
               className="h-12 border-0 pl-9 shadow-none focus-visible:ring-0"
             />
           </div>
